@@ -12,7 +12,7 @@ How do i run this thing?<p> -->
 
 ## Author
 
-* **Jairo González** - *201304502-2* - jairo.gonzalez.13 [at] sansano.usm.cl
+* **Jairo González** -  jairo.gonzalez.13 [at] sansano.usm.cl
 
 ## Supervising Professor
 
