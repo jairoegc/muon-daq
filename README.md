@@ -2,13 +2,17 @@
 
 FPGA based DAQ for sTGC muon detector system, for muongraphy purposes.
 
-<!-- ## Prerequisites
+## Prerequisites
 
-system, program, editors, compilation, modules, dependencies<p>
+This project was designed on Vivado 2019.1 under Windows 10.<p>
+The FPGA used for this desing is a TRENZ TE0712-02 mounted on a TE0703-06 board.<p>
 
-## Compilation and Execution
+## Vivado Project Rebuild
 
-How do i run this thing?<p> -->
+To rebuild this project, open Vivado TCL Console, and type the following lines:<p> 
+
+* cd "path_to_build.tcl/"<p>
+* source buidl.tcl<p>
 
 ## Author
 
