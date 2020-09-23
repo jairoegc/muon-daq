@@ -82,17 +82,15 @@ module  sampler#(
     ///////// Pulse Buffer /////////////////////////
     logic rd_en = 'd0;
     fifo_generator_0 fifo_ch15 (
-        .rst(rst),        // input wire rst
-        .wr_clk(clk),  // input wire wr_clk
-        .rd_clk(clk),  // input wire rd_clk
-        .din(synchronized_pulse),        // input wire [0 : 0] din
-        .wr_en('d1),    // input wire wr_en
-        .rd_en(rd_en),    // input wire rd_en
-        .dout(B14_L13_P),      // output wire [0 : 0] dout
-        .full(B15_IO25),      // output wire full
-        .empty(B15_IO0)    // output wire empty
+        .clk(clk),      // input wire clk
+        .rst(rst),      // input wire rst
+        .din(synchronized_pulse),      // input wire [0 : 0] din
+        .wr_en('d1),  // input wire wr_en
+        .rd_en(rd_en),  // input wire rd_en
+        .dout(B14_L13_P),    // output wire [0 : 0] dout
+        .full(B15_IO25),    // output wire full
+        .empty(B15_IO0)  // output wire empty
     );
-
 
     ///////// FSM ///////////////////////
     enum logic {START, READ} state, state_next;
