@@ -71,11 +71,11 @@ module  sampler#(
 
     ///////// Pulse Sync ////////////////////////////
     logic synchronized_pulse;
-    posedge_detector sync_inst(
+    synchronizer sync_inst(
         .clk(clk),
         .rst(rst),
-        .signal(~lvds_output),
-        .detection(synchronized_pulse)
+        .i_signal(~lvds_output),
+        .o_signal(synchronized_pulse)
     );
 
 
@@ -151,7 +151,7 @@ module  sampler#(
         .probe7(hold_state_delay), // input wire [5:0]  probe7 
         .probe8(state_next), // input wire [0:0]  probe8 
         .probe9(state), // input wire [0:0]  probe9
-        .probe10(clk) // input wire [0:0]  probe10
+        .probe10('d0)
     );
 
 endmodule
