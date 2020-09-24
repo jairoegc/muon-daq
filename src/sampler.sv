@@ -74,7 +74,7 @@ module  sampler#(
     posedge_detector sync_inst(
         .clk(clk),
         .rst(rst),
-        .signal(lvds_output),
+        .signal(~lvds_output),
         .detection(synchronized_pulse)
     );
 
@@ -133,5 +133,25 @@ module  sampler#(
        else
            hold_state_delay <= hold_state_delay + 'd1;       
     end
+
+
+    ////////// ILA //////////////////////////////
+    ila_0 ILA_module (
+        .clk(clk), // input wire clk
+
+
+
+        .probe0(lvds_output), // input wire [0:0]  probe0  
+        .probe1(synchronized_pulse), // input wire [0:0]  probe1 
+        .probe2(B14_L13_P), // input wire [0:0]  probe2 
+        .probe3(rd_en), // input wire [0:0]  probe3 
+        .probe4(B15_IO25), // input wire [0:0]  probe4 
+        .probe5(B15_IO0), // input wire [0:0]  probe5 
+        .probe6(hold_state_reset), // input wire [0:0]  probe6 
+        .probe7(hold_state_delay), // input wire [5:0]  probe7 
+        .probe8(state_next), // input wire [0:0]  probe8 
+        .probe9(state), // input wire [0:0]  probe9
+        .probe10(clk) // input wire [0:0]  probe10
+    );
 
 endmodule
