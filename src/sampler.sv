@@ -32,7 +32,7 @@ module  sampler#(
             // input   logic   reset,
             input   logic   B16_L22_P,  //E22 A19
             input   logic   B16_L22_N,  //D22 A18
-            output  logic   B14_L13_P,   //Y18 J2-C23 ?
+            //output  logic   B14_L13_P,   //Y18 J2-C23 ?
             output  logic   B15_IO0,    //J16 LED 4
             output  logic   B15_IO25    //M17 LED 3
         );
@@ -71,23 +71,31 @@ module  sampler#(
 
     ///////// Pulse Sync ////////////////////////////
     logic synchronized_pulse;
-    synchronizer sync_inst(
+    posedge_detector sync_inst(
         .clk(clk),
         .rst(rst),
-        .i_signal(~lvds_output),
-        .o_signal(synchronized_pulse)
+        .signal(~lvds_output),
+        .detection(synchronized_pulse)
     );
+    // synchronizer sync_inst(
+    //     .clk(clk),
+    //     .rst(rst),
+    //     .i_signal(~lvds_output),
+    //     .o_signal(synchronized_pulse)
+    // );
+
 
 
     ///////// Pulse Buffer /////////////////////////
     logic rd_en = 'd0;
+    logic read_pulse;
     fifo_generator_0 fifo_ch15 (
         .clk(clk),      // input wire clk
         .rst(rst),      // input wire rst
         .din(synchronized_pulse),      // input wire [0 : 0] din
         .wr_en('d1),  // input wire wr_en
         .rd_en(rd_en),  // input wire rd_en
-        .dout(B14_L13_P),    // output wire [0 : 0] dout
+        .dout(read_pulse),    // output wire [0 : 0] dout
         .full(B15_IO25),    // output wire full
         .empty(B15_IO0)  // output wire empty
     );
@@ -134,6 +142,22 @@ module  sampler#(
            hold_state_delay <= hold_state_delay + 'd1;       
     end
 
+       //////// Counters
+    logic [7:0] pulse_counter = 'd0;
+    logic [7:0] pulse_counter_next = 'd0;
+
+    //Pulse Counter Logic
+    always_comb begin
+        if (read_pulse)
+            pulse_counter_next =  pulse_counter + 'd1;
+        else
+            pulse_counter_next = pulse_counter;
+    end
+
+
+    //FF
+    always_ff @ (posedge clk)
+        pulse_counter <= pulse_counter_next;
 
     ////////// ILA //////////////////////////////
     ila_0 ILA_module (
@@ -143,7 +167,7 @@ module  sampler#(
 
         .probe0(lvds_output), // input wire [0:0]  probe0  
         .probe1(synchronized_pulse), // input wire [0:0]  probe1 
-        .probe2(B14_L13_P), // input wire [0:0]  probe2 
+        .probe2(read_pulse), // input wire [0:0]  probe2 
         .probe3(rd_en), // input wire [0:0]  probe3 
         .probe4(B15_IO25), // input wire [0:0]  probe4 
         .probe5(B15_IO0), // input wire [0:0]  probe5 
@@ -151,7 +175,7 @@ module  sampler#(
         .probe7(hold_state_delay), // input wire [5:0]  probe7 
         .probe8(state_next), // input wire [0:0]  probe8 
         .probe9(state), // input wire [0:0]  probe9
-        .probe10('d0)
+        .probe10(pulse_counter)
     );
 
 endmodule
