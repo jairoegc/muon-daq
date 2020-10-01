@@ -30,8 +30,7 @@ module  sampler#(
  )(
             input   logic   clk_in1_p,clk_in1_n,
             // input   logic   reset,
-            input   logic   B16_L22_P,  //E22 A19
-            input   logic   B16_L22_N,  //D22 A18
+            input   logic   [1:0][15:0][1:0]Ch,
             //output  logic   B14_L13_P,   //Y18 J2-C23 ?
             output  logic   B15_IO0,    //J16 LED 4
             output  logic   B15_IO25    //M17 LED 3
@@ -63,8 +62,8 @@ module  sampler#(
         .IOSTANDARD("LVDS_25") // Specify the input I/O standard
         ) IBUFDS_LVDS_25 (
         .O(lvds_output), // Buffer output
-        .I(B16_L22_P), // Diff_p buffer input (connect directly to top-level port)
-        .IB(B16_L22_N) // Diff_n buffer input (connect directly to top-level port)
+        .I(Ch[0][15][1]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch[0][15][0]) // Diff_n buffer input (connect directly to top-level port)
     );
     // End of IBUFDS_inst instantiation
 

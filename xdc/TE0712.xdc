@@ -20,26 +20,26 @@ set_property CONFIG_VOLTAGE 3.3 [current_design]
 # set_property PACKAGE_PIN Y11 [get_ports B13_L11_P]
 # set_property PACKAGE_PIN AA11 [get_ports B13_L9_N]
 # set_property -dict {PACKAGE_PIN AA10 IOSTANDARD LVCMOS33} [get_ports B13_L9_P]
-set_property -dict {PACKAGE_PIN E22 IOSTANDARD LVDS_25} [get_ports B16_L22_P]
-set_property -dict {PACKAGE_PIN D22 IOSTANDARD LVDS_25} [get_ports B16_L22_N]
+set_property -dict {PACKAGE_PIN E22 IOSTANDARD LVDS_25} [get_ports Ch[0][15][1]]; #B16_L22_P
+set_property -dict {PACKAGE_PIN D22 IOSTANDARD LVDS_25} [get_ports Ch[0][15][0]]; #B16_L22_N
 # set_property PACKAGE_PIN G22 [get_ports B16_L24_N]
 # set_property PACKAGE_PIN G21 [get_ports B16_L24_P]
-# set_property PACKAGE_PIN E21 [get_ports B16_L23_P]
-# set_property PACKAGE_PIN D21 [get_ports B16_L23_N]
+set_property -dict {PACKAGE_PIN E21 IOSTANDARD LVDS_25} [get_ports Ch[0][12][1]]; #B16_L23_P
+set_property -dict {PACKAGE_PIN D21 IOSTANDARD LVDS_25} [get_ports Ch[0][12][0]]; #B16_L23_N
 # set_property PACKAGE_PIN F18 [get_ports B16_L15_P]
 # set_property PACKAGE_PIN E18 [get_ports B16_L15_N]
-# set_property PACKAGE_PIN C22 [get_ports B16_L20_P]
-# set_property PACKAGE_PIN B22 [get_ports B16_L20_N]
-# set_property PACKAGE_PIN B21 [get_ports B16_L21_P]
-# set_property PACKAGE_PIN A21 [get_ports B16_L21_N]
-# set_property PACKAGE_PIN C18 [get_ports B16_L13_P]
-# set_property PACKAGE_PIN C19 [get_ports B16_L13_N]
-# set_property PACKAGE_PIN E19 [get_ports B16_L14_P]
-# set_property PACKAGE_PIN D19 [get_ports B16_L14_N]
+set_property -dict {PACKAGE_PIN C22 IOSTANDARD LVDS_25} [get_ports Ch[0][10][1]]; #B16_L20_P
+set_property -dict {PACKAGE_PIN B22 IOSTANDARD LVDS_25} [get_ports Ch[0][10][0]]; #B16_L20_N
+set_property -dict {PACKAGE_PIN B21 IOSTANDARD LVDS_25} [get_ports Ch[0][9][1]]; #B16_L21_P
+set_property -dict {PACKAGE_PIN A21 IOSTANDARD LVDS_25} [get_ports Ch[0][9][0]]; #B16_L21_N
+set_property -dict {PACKAGE_PIN C18 IOSTANDARD LVDS_25} [get_ports Ch[0][7][1]]; #B16_L13_P
+set_property -dict {PACKAGE_PIN C19 IOSTANDARD LVDS_25} [get_ports Ch[0][7][0]]; #B16_L13_N
+set_property -dict {PACKAGE_PIN E19 IOSTANDARD LVDS_25} [get_ports Ch[0][5][1]]; #B16_L14_P
+set_property -dict {PACKAGE_PIN D19 IOSTANDARD LVDS_25} [get_ports Ch[0][5][0]]; #B16_L14_N
 # set_property PACKAGE_PIN C15 [get_ports B16_L3_N]
 # set_property PACKAGE_PIN C14 [get_ports B16_L3_P]
-# set_property PACKAGE_PIN D17 [get_ports B16_L12_P]
-# set_property PACKAGE_PIN C17 [get_ports B16_L12_N]
+set_property -dict {PACKAGE_PIN D17 IOSTANDARD LVDS_25} [get_ports Ch[0][3][1]]; #B16_L12_P
+set_property -dict {PACKAGE_PIN C17 IOSTANDARD LVDS_25} [get_ports Ch[0][3][0]]; #B16_L12_N
 # set_property PACKAGE_PIN B13 [get_ports B16_L8_N]
 # set_property PACKAGE_PIN C13 [get_ports B16_L8_P]
 # set_property PACKAGE_PIN U18 [get_ports B14_L18_N]
@@ -53,33 +53,33 @@ set_property -dict {PACKAGE_PIN D22 IOSTANDARD LVDS_25} [get_ports B16_L22_N]
 # set_property PACKAGE_PIN W14 [get_ports B13_L6_P]
 # set_property PACKAGE_PIN AA14 [get_ports B13_L5_N]
 # set_property PACKAGE_PIN Y13 [get_ports B13_L5_P]
-# set_property PACKAGE_PIN B20 [get_ports B16_L16_P]
-# set_property PACKAGE_PIN A20 [get_ports B16_L16_N]
-# set_property PACKAGE_PIN C20 [get_ports B16_L19_N]
-# set_property PACKAGE_PIN D20 [get_ports B16_L19_P]
-# set_property PACKAGE_PIN A19 [get_ports B16_L17_N]
-# set_property PACKAGE_PIN A18 [get_ports B16_L17_P]
+set_property -dict {PACKAGE_PIN B20 IOSTANDARD LVDS_25} [get_ports Ch[0][14][1]]; #B16_L16_P
+set_property -dict {PACKAGE_PIN A20 IOSTANDARD LVDS_25} [get_ports Ch[0][14][0]]; #B16_L16_N
+set_property -dict {PACKAGE_PIN C20 IOSTANDARD LVDS_25} [get_ports Ch[0][13][0]]; #B16_L19_N
+set_property -dict {PACKAGE_PIN D20 IOSTANDARD LVDS_25} [get_ports Ch[0][13][1]]; #B16_L19_P
+set_property -dict {PACKAGE_PIN A19 IOSTANDARD LVDS_25} [get_ports Ch[0][11][0]]; #B16_L17_N
+set_property -dict {PACKAGE_PIN A18 IOSTANDARD LVDS_25} [get_ports Ch[0][11][1]]; #B16_L17_P
 # set_property PACKAGE_PIN F20 [get_ports B16_L18_N]
 # set_property PACKAGE_PIN F19 [get_ports B16_L18_P]
-# set_property PACKAGE_PIN A16 [get_ports B16_L9_N]
-# set_property PACKAGE_PIN A15 [get_ports B16_L9_P]
+set_property -dict {PACKAGE_PIN A16 IOSTANDARD LVDS_25} [get_ports Ch[0][8][0]]; #B16_L9_N
+set_property -dict {PACKAGE_PIN A15 IOSTANDARD LVDS_25} [get_ports Ch[0][8][1]]; #B16_L9_P
 # set_property PACKAGE_PIN B16 [get_ports B16_L7_N]
 # set_property PACKAGE_PIN B15 [get_ports B16_L7_P]
-# set_property PACKAGE_PIN B17 [get_ports B16_L11_P]
-# set_property PACKAGE_PIN B18 [get_ports B16_L11_N]
-# set_property PACKAGE_PIN A14 [get_ports B16_L10_N]
-# set_property PACKAGE_PIN A13 [get_ports B16_L10_P]
-# set_property PACKAGE_PIN D16 [get_ports B16_L5_N]
-# set_property PACKAGE_PIN E16 [get_ports B16_L5_P]
+set_property -dict {PACKAGE_PIN B17 IOSTANDARD LVDS_25} [get_ports Ch[0][6][1]]; #B16_L11_P
+set_property -dict {PACKAGE_PIN B18 IOSTANDARD LVDS_25} [get_ports Ch[0][6][0]]; #B16_L11_N
+set_property -dict {PACKAGE_PIN A14 IOSTANDARD LVDS_25} [get_ports Ch[0][4][0]]; #B16_L10_N
+set_property -dict {PACKAGE_PIN A13 IOSTANDARD LVDS_25} [get_ports Ch[0][4][1]]; #B16_L10_P
+set_property -dict {PACKAGE_PIN D16 IOSTANDARD LVDS_25} [get_ports Ch[0][2][0]]; #B16_L5_N
+set_property -dict {PACKAGE_PIN E16 IOSTANDARD LVDS_25} [get_ports Ch[0][2][1]]; #B16_L5_P
 # set_property PACKAGE_PIN E17 [get_ports B16_L2_N]
 # set_property PACKAGE_PIN F16 [get_ports B16_L2_P]
-# set_property PACKAGE_PIN D15 [get_ports B16_L6_N]
-# set_property PACKAGE_PIN D14 [get_ports B16_L6_P]
+set_property -dict {PACKAGE_PIN D15 IOSTANDARD LVDS_25} [get_ports Ch[0][0][0]]; #B16_L6_N
+set_property -dict {PACKAGE_PIN D14 IOSTANDARD LVDS_25} [get_ports Ch[0][0][1]]; #B16_L6_P
 # set_property PACKAGE_PIN P16 [get_ports B14_L24_P]
 # set_property PACKAGE_PIN E14 [get_ports B16_L4_N]
 # set_property PACKAGE_PIN E13 [get_ports B16_L4_P]
-# set_property PACKAGE_PIN F14 [get_ports B16_L1_N]
-# set_property PACKAGE_PIN F13 [get_ports B16_L1_P]
+set_property -dict {PACKAGE_PIN F14 IOSTANDARD LVDS_25} [get_ports Ch[0][1][0]]; #B16_L1_N
+set_property -dict {PACKAGE_PIN F13 IOSTANDARD LVDS_25} [get_ports Ch[0][1][1]]; #B16_L1_P
 # set_property PACKAGE_PIN AA21 [get_ports B14_L8_N]
 # set_property PACKAGE_PIN AA20 [get_ports B14_L8_P]
 # set_property PACKAGE_PIN AB18 [get_ports B14_L17_N]
