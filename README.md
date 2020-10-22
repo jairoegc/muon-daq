@@ -8,7 +8,7 @@ Index:
 2. [Vivado Project Rebuild](##Vivado-Project-Rebuild)
 3. [Author](##Author)
 4. [Supervising Professor](##Supervising-Professor)
-5. [Apendix A: Version control of an HDL Vivado Project](##Appendix-A:-Version-control-of-an-HDL-Vivado-Project)
+5. [Apendix A: Version control of an HDL Vivado Project](##Appendix-A-Version-control-of-an-HDL-Vivado-Project)
 
 ## Tools and Environment
 
