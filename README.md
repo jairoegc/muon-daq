@@ -4,11 +4,11 @@ FPGA based DAQ for sTGC muon detector system, for muongraphy purposes.
 
 Index:
 
-1. [Prerrequisites](##Prerequisites)
-2. [Vivado Project Rebuild](##Vivado-Project-Rebuild)
-3. [Author](##Author)
-4. [Supervising Professor](##Supervising-Professor)
-5. [Apendix A: Version control of an HDL Vivado Project](##Appendix-A-Version-control-of-an-HDL-Vivado-Project)
+1. [Tools and Environment](#Tools-and-Environment)
+2. [Vivado Project Rebuild](#Vivado-Project-Rebuild)
+3. [Author](#Author)
+4. [Supervising Professor](#Supervising-Professor)
+5. [Apendix A: Version control of an HDL Vivado Project](#Appendix-A-Version-control-of-an-HDL-Vivado-Project)
 
 ## Tools and Environment
 
