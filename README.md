@@ -9,6 +9,7 @@ Index:
 3. [Author](#Author)
 4. [Supervising Professor](#Supervising-Professor)
 5. [Apendix A: Version control of an HDL Vivado Project](#Appendix-A-Version-control-of-an-HDL-Vivado-Project)
+6. [Appendix B: Interfacing LVDS Signals to an Artix 7 FPGA](#Appendix-B-Interfacing-LVDS-Signals-to-an-Artix-7-FPGA)
 
 ## Tools and Environment
 
@@ -167,7 +168,7 @@ For the .gitinit, include any system-created file to don't upload it to git, and
   
   Now you can freely delete your older Vivado project folder because you can rebuild it again running your new *build.tcl* script as indicated in [Vivado Project Rebuild](##Vivado-Project-Rebuild) section.
 
-### References
+### Appendix A References
 
 1. [J. Johnson, "Version Control for Vivado Projects", www.fpgadeveloper.com, 2014](http://www.fpgadeveloper.com/2014/08/version-control-for-vivado-projects.html)
 
@@ -176,3 +177,41 @@ For the .gitinit, include any system-created file to don't upload it to git, and
 3. [Xilinx, "Using Source Control Systems With The Vivado Tool - UG892 (v2018.2)", Chapter 5, 2018](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2018_2/ug892-vivado-design-flows-overview.pdf#nameddest=xUsingSourceControlSystemsWithTheVivadoTool)
 
 ----
+
+## Appendix B: Interfacing LVDS Signals to an Artix 7 FPGA
+
+### About LVDS
+
+physical layer, diferencial noise, long data rails, receptors, emitters, signal integrity, impedance.
+
+### Standards
+
+LVDS 1996? lvds, lvds25, lvds18, voltage.
+
+### Impedance
+
+100 ohm, tracks longitude, voltage?
+
+### Artix 7
+
+Banks, available standars, available banks, specyfic fpga banks, voltage levels.
+
+### Constraints
+
+Ports contraints, voltage levels.
+
+### Design template
+
+to instantiate an lvds input port.
+
+### Appendix B References
+
+1. [Xilinx, Xilinx 7 Series FPGA Libraries: Guide for HDL Designs (UG768), 2015.](https://www.xilinx.com/support/documentation/sw_manuals/xilinx13_4/7series_scm.pdf)
+
+2. IEEE Standard for Low-Voltage Dierential Signals (LVDS) for Scalable Coherent Interface (SCI) Mi-croprocessor and Microcomputer Standards Committee of the IEEE Computer Society. Technical report,1996.
+
+3. [ATLAS Thin Gap Chamber Production Readiness Review Report Amplififer-Shaper-Discriminator ICs. Technical report, 1999.](http://online.kek.jp/~sosamu/ASD-PRR.pdf.)
+
+4. Xilinx and Inc. Artix-7 FPGAs Data Sheet: DC and AC Switching Characteristics (DS181). Technical report, 2018.
+
+5. 7 Series FPGAs SelectIO Resources User Guide (UG471), 2018.
