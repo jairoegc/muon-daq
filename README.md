@@ -298,9 +298,11 @@ The comparator circuit compares the signal with an external threshold voltage *V
 
   For example, for a cathode pulse (positive) of 0.3pC, the expected output voltage of the preamplifier stage is 240mV. The LEMO analog output of this stage could be lower due to the load impedance. With a gain of 7, the expected voltage output of the main amplifier stage is 1,68V. The pulse duration is approximately 70ns, supposing a rising time of 10 ns and a charge proportional to the input charge. With a real voltage threshold of 90mV, the output comparator signal has a time duration of approximately 50ns.
 
+  The first image includes a 0.3pC pulse, while the second image shows the analog preamplifier output. The analog preamplifier output pulse has a 180mV amplitude, 25% lower than expected, probably due to the input impedance of the oscilloscope.
+
   ![Screenshot of a charge injector output pulse measured with an oscilloscope.](assets/images/charge-injector-output.png "Charge injector signal output")
 
-  ![Screenshot of the ASD analog output, measured with an oscilloscope.](assets/images/asd-analog-output.png "Charge injector signal output")
+  ![Screenshot of the ASD analog output, measured with an oscilloscope.](assets/images/asd-analog-output.png "ASD analog output signal output")
 
 At this time, there is some missing information about the shaping of the pulses. The amplified pulses have fixed rising and falling timing, but these timings are not clear yet. It's possible to estimate this relevant information from test runs. It will be key information for determining the relation between impulse charge input and pulse duration output.
 
