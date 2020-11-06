@@ -276,7 +276,7 @@ The ASD Board is a 16 channels readout system for sTGC muon detectors, part of t
 
 The acronym means Amplificator, Shaper, and Discriminator. This board amplifies the charge of an electric pulse, shapes it in time and amplitude to be able to measure it, and discriminates its amplitude with a comparator with an adjustable threshold, to emit digital LVDS outputs from the input pulses.
 
-In this project, the idea is to use these boards with the *strips* of sTGC-like detectors. With two superimposed detectors, it's possible to determinate a quadrant of where a muon has passed through. Using another pair of superimposed detectors makes it possible to determine the trajectory of a particle. Analyzing the duration of each pulse makes it possible to calculate the charge amplitude of the incoming pulse.
+In this project, the idea is to use these boards with the *strips* of sTGC-like detectors. With two superimposed detectors, it's possible to determine a quadrant of where a muon has passed through. Using another pair of superimposed detectors makes it possible to determine the trajectory of a particle. Analyzing the duration of each pulse makes it possible to calculate the charge amplitude of the incoming pulse.
 
 ![ASD Board, showing his channel 15 input port, the LEMO analog output, and its #1 pin on the 40-pin Flat Cable connector](assets/images/asd-board.png "ASD Board photo")
 
