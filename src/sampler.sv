@@ -24,48 +24,24 @@
 //////////////////////////////////////////////////////////////////////////////
 
 
-module  sampler#(
- parameter BUFFER=80,
- parameter BUFFER_WIDTH = $clog2(BUFFER)
- )(
-            input   logic   clk_in1,
+module  sampler(
+            input   logic   clk_500,
             // input   logic   reset,
             input   logic   event_saved,
             input   logic   [1:0][15:0][1:0]Ch,
             input   logic   trig_tresh,
-            output  logic   event_ready,
-            output  logic   [79:0] evento,
+            //output  logic   event_ready,
+            output  logic   [15:0][63:0] evento
             //output  logic   B14_L13_P,   //Y18 J2-C23 ?
-            output  logic   B15_IO25,    //U7 LED 4
-            output  logic   B15_IO0    //R7 LED 3
+            //output  logic   B15_IO25,    //U7 LED 4
+            //output  logic   B15_IO0    //R7 LED 3
         );
 
     logic rst = 'd0;
-    //logic clk_125;
     logic clk_500;
 
-    //////////// Main Clock /////////////////////////////////
-    clk_wiz_0 clock_wiz_inst (
-        // Clock out ports
-        .clk_out1(clk_500),    // output clk_out1 500MHz
-        // Status and control signals
-        .reset(rst),          // input reset
-        .locked(locked),        // output locked
-        // Clock in ports
-        .clk_in1(clk_in1))      // input clk_in1
-    ; 
-
-    ////////// Secondary Clock /////////////////////////////////
-    clk_divider #(
-        .O_CLK_FREQ('d125_000_000)
-        ) clk_divider_inst (
-            .clk_in(clk_500),
-	        .reset(rst),
-	        .clk_out(clk_125)
-    );
-
     /////////// Input LVDS //////////////////////////////
-    logic lvds_output;
+    logic lvds_output_15;
     // IBUFDS: Differential Input Buffer
     // 7 Series
     // Xilinx HDL Libraries Guide, version 13.4
@@ -73,36 +49,374 @@ module  sampler#(
         .DIFF_TERM("TRUE"), // Differential Termination
         .IBUF_LOW_PWR("TRUE"), // Low power="TRUE", Highest performance="FALSE"
         .IOSTANDARD("LVDS_25") // Specify the input I/O standard
-        ) IBUFDS_LVDS_25 (
-        .O(lvds_output), // Buffer output
+        ) IBUFDS_LVDS_25_15 (
+        .O(lvds_output_15), // Buffer output
         .I(Ch[0][15][1]), // Diff_p buffer input (connect directly to top-level port)
         .IB(Ch[0][15][0]) // Diff_n buffer input (connect directly to top-level port)
     );
     // End of IBUFDS_inst instantiation
 
+    logic lvds_output_14;
+    // IBUFDS: Differential Input Buffer
+    // 7 Series
+    // Xilinx HDL Libraries Guide, version 13.4
+    IBUFDS #(
+        .DIFF_TERM("TRUE"), // Differential Termination
+        .IBUF_LOW_PWR("TRUE"), // Low power="TRUE", Highest performance="FALSE"
+        .IOSTANDARD("LVDS_25") // Specify the input I/O standard
+        ) IBUFDS_LVDS_25_14 (
+        .O(lvds_output_14), // Buffer output
+        .I(Ch[0][14][1]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch[0][14][0]) // Diff_n buffer input (connect directly to top-level port)
+    );
+
+    logic lvds_output_13;
+    // IBUFDS: Differential Input Buffer
+    // 7 Series
+    // Xilinx HDL Libraries Guide, version 13.4
+    IBUFDS #(
+        .DIFF_TERM("TRUE"), // Differential Termination
+        .IBUF_LOW_PWR("TRUE"), // Low power="TRUE", Highest performance="FALSE"
+        .IOSTANDARD("LVDS_25") // Specify the input I/O standard
+        ) IBUFDS_LVDS_25_13 (
+        .O(lvds_output_13), // Buffer output
+        .I(Ch[0][13][1]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch[0][13][0]) // Diff_n buffer input (connect directly to top-level port)
+    );
+
+    logic lvds_output_12;
+    // IBUFDS: Differential Input Buffer
+    // 7 Series
+    // Xilinx HDL Libraries Guide, version 13.4
+    IBUFDS #(
+        .DIFF_TERM("TRUE"), // Differential Termination
+        .IBUF_LOW_PWR("TRUE"), // Low power="TRUE", Highest performance="FALSE"
+        .IOSTANDARD("LVDS_25") // Specify the input I/O standard
+        ) IBUFDS_LVDS_25_12 (
+        .O(lvds_output_12), // Buffer output
+        .I(Ch[0][12][1]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch[0][12][0]) // Diff_n buffer input (connect directly to top-level port)
+    );
+
+    logic lvds_output_11;
+    // IBUFDS: Differential Input Buffer
+    // 7 Series
+    // Xilinx HDL Libraries Guide, version 13.4
+    IBUFDS #(
+        .DIFF_TERM("TRUE"), // Differential Termination
+        .IBUF_LOW_PWR("TRUE"), // Low power="TRUE", Highest performance="FALSE"
+        .IOSTANDARD("LVDS_25") // Specify the input I/O standard
+        ) IBUFDS_LVDS_25_11 (
+        .O(lvds_output_11), // Buffer output
+        .I(Ch[0][11][1]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch[0][11][0]) // Diff_n buffer input (connect directly to top-level port)
+    );
+
+    logic lvds_output_10;
+    // IBUFDS: Differential Input Buffer
+    // 7 Series
+    // Xilinx HDL Libraries Guide, version 13.4
+    IBUFDS #(
+        .DIFF_TERM("TRUE"), // Differential Termination
+        .IBUF_LOW_PWR("TRUE"), // Low power="TRUE", Highest performance="FALSE"
+        .IOSTANDARD("LVDS_25") // Specify the input I/O standard
+        ) IBUFDS_LVDS_25_10 (
+        .O(lvds_output_10), // Buffer output
+        .I(Ch[0][10][1]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch[0][10][0]) // Diff_n buffer input (connect directly to top-level port)
+    );
+
+    logic lvds_output_9;
+    // IBUFDS: Differential Input Buffer
+    // 7 Series
+    // Xilinx HDL Libraries Guide, version 13.4
+    IBUFDS #(
+        .DIFF_TERM("TRUE"), // Differential Termination
+        .IBUF_LOW_PWR("TRUE"), // Low power="TRUE", Highest performance="FALSE"
+        .IOSTANDARD("LVDS_25") // Specify the input I/O standard
+        ) IBUFDS_LVDS_25_9 (
+        .O(lvds_output_9), // Buffer output
+        .I(Ch[0][9][1]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch[0][9][0]) // Diff_n buffer input (connect directly to top-level port)
+    );
+
+    logic lvds_output_8;
+    // IBUFDS: Differential Input Buffer
+    // 7 Series
+    // Xilinx HDL Libraries Guide, version 13.4
+    IBUFDS #(
+        .DIFF_TERM("TRUE"), // Differential Termination
+        .IBUF_LOW_PWR("TRUE"), // Low power="TRUE", Highest performance="FALSE"
+        .IOSTANDARD("LVDS_25") // Specify the input I/O standard
+        ) IBUFDS_LVDS_25_8 (
+        .O(lvds_output_8), // Buffer output
+        .I(Ch[0][8][1]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch[0][8][0]) // Diff_n buffer input (connect directly to top-level port)
+    );
+
+    logic lvds_output_7;
+    // IBUFDS: Differential Input Buffer
+    // 7 Series
+    // Xilinx HDL Libraries Guide, version 13.4
+    IBUFDS #(
+        .DIFF_TERM("TRUE"), // Differential Termination
+        .IBUF_LOW_PWR("TRUE"), // Low power="TRUE", Highest performance="FALSE"
+        .IOSTANDARD("LVDS_25") // Specify the input I/O standard
+        ) IBUFDS_LVDS_25_7 (
+        .O(lvds_output_7), // Buffer output
+        .I(Ch[0][7][1]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch[0][7][0]) // Diff_n buffer input (connect directly to top-level port)
+    );
+
+    logic lvds_output_6;
+    // IBUFDS: Differential Input Buffer
+    // 7 Series
+    // Xilinx HDL Libraries Guide, version 13.4
+    IBUFDS #(
+        .DIFF_TERM("TRUE"), // Differential Termination
+        .IBUF_LOW_PWR("TRUE"), // Low power="TRUE", Highest performance="FALSE"
+        .IOSTANDARD("LVDS_25") // Specify the input I/O standard
+        ) IBUFDS_LVDS_25_6 (
+        .O(lvds_output_6), // Buffer output
+        .I(Ch[0][6][1]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch[0][6][0]) // Diff_n buffer input (connect directly to top-level port)
+    );
+
+    logic lvds_output_5;
+    // IBUFDS: Differential Input Buffer
+    // 7 Series
+    // Xilinx HDL Libraries Guide, version 13.4
+    IBUFDS #(
+        .DIFF_TERM("TRUE"), // Differential Termination
+        .IBUF_LOW_PWR("TRUE"), // Low power="TRUE", Highest performance="FALSE"
+        .IOSTANDARD("LVDS_25") // Specify the input I/O standard
+        ) IBUFDS_LVDS_25_5 (
+        .O(lvds_output_5), // Buffer output
+        .I(Ch[0][5][1]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch[0][5][0]) // Diff_n buffer input (connect directly to top-level port)
+    );
+
+    logic lvds_output_4;
+    // IBUFDS: Differential Input Buffer
+    // 7 Series
+    // Xilinx HDL Libraries Guide, version 13.4
+    IBUFDS #(
+        .DIFF_TERM("TRUE"), // Differential Termination
+        .IBUF_LOW_PWR("TRUE"), // Low power="TRUE", Highest performance="FALSE"
+        .IOSTANDARD("LVDS_25") // Specify the input I/O standard
+        ) IBUFDS_LVDS_25_4 (
+        .O(lvds_output_4), // Buffer output
+        .I(Ch[0][4][1]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch[0][4][0]) // Diff_n buffer input (connect directly to top-level port)
+    );
+
+    logic lvds_output_3;
+    // IBUFDS: Differential Input Buffer
+    // 7 Series
+    // Xilinx HDL Libraries Guide, version 13.4
+    IBUFDS #(
+        .DIFF_TERM("TRUE"), // Differential Termination
+        .IBUF_LOW_PWR("TRUE"), // Low power="TRUE", Highest performance="FALSE"
+        .IOSTANDARD("LVDS_25") // Specify the input I/O standard
+        ) IBUFDS_LVDS_25_3 (
+        .O(lvds_output_3), // Buffer output
+        .I(Ch[0][3][1]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch[0][3][0]) // Diff_n buffer input (connect directly to top-level port)
+    );
+
+    logic lvds_output_2;
+    // IBUFDS: Differential Input Buffer
+    // 7 Series
+    // Xilinx HDL Libraries Guide, version 13.4
+    IBUFDS #(
+        .DIFF_TERM("TRUE"), // Differential Termination
+        .IBUF_LOW_PWR("TRUE"), // Low power="TRUE", Highest performance="FALSE"
+        .IOSTANDARD("LVDS_25") // Specify the input I/O standard
+        ) IBUFDS_LVDS_25_2 (
+        .O(lvds_output_2), // Buffer output
+        .I(Ch[0][2][1]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch[0][2][0]) // Diff_n buffer input (connect directly to top-level port)
+    );
+
+    logic lvds_output_1;
+    // IBUFDS: Differential Input Buffer
+    // 7 Series
+    // Xilinx HDL Libraries Guide, version 13.4
+    IBUFDS #(
+        .DIFF_TERM("TRUE"), // Differential Termination
+        .IBUF_LOW_PWR("TRUE"), // Low power="TRUE", Highest performance="FALSE"
+        .IOSTANDARD("LVDS_25") // Specify the input I/O standard
+        ) IBUFDS_LVDS_25_1 (
+        .O(lvds_output_1), // Buffer output
+        .I(Ch[0][1][1]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch[0][1][0]) // Diff_n buffer input (connect directly to top-level port)
+    );
+
+    logic lvds_output_0;
+    // IBUFDS: Differential Input Buffer
+    // 7 Series
+    // Xilinx HDL Libraries Guide, version 13.4
+    IBUFDS #(
+        .DIFF_TERM("TRUE"), // Differential Termination
+        .IBUF_LOW_PWR("TRUE"), // Low power="TRUE", Highest performance="FALSE"
+        .IOSTANDARD("LVDS_25") // Specify the input I/O standard
+        ) IBUFDS_LVDS_25_0 (
+        .O(lvds_output_0), // Buffer output
+        .I(Ch[0][0][1]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch[0][0][0]) // Diff_n buffer input (connect directly to top-level port)
+    );
 
     ///////// Pulse Sync ////////////////////////////
-    logic synchronized_pulse;
-    posedge_detector sync_inst(
+    logic synchronized_pulse_15;
+    posedge_detector sync_inst_15(
         .clk(clk_500),
         .rst(rst),
-        .signal(~lvds_output),
-        .detection(synchronized_pulse)
+        .signal(~lvds_output_15),
+        .detection(synchronized_pulse_15)
     );
-    // synchronizer sync_inst(
-    //     .clk(clk),
-    //     .rst(rst),
-    //     .i_signal(~lvds_output),
-    //     .o_signal(synchronized_pulse)
-    // );
+
+    logic synchronized_pulse_14;
+    posedge_detector sync_inst_14(
+        .clk(clk_500),
+        .rst(rst),
+        .signal(~lvds_output_14),
+        .detection(synchronized_pulse_14)
+    );
+
+    logic synchronized_pulse_13;
+    posedge_detector sync_inst_13(
+        .clk(clk_500),
+        .rst(rst),
+        .signal(~lvds_output_13),
+        .detection(synchronized_pulse_13)
+    );
+
+    logic synchronized_pulse_12;
+    posedge_detector sync_inst_12(
+        .clk(clk_500),
+        .rst(rst),
+        .signal(~lvds_output_12),
+        .detection(synchronized_pulse_12)
+    );
+
+    logic synchronized_pulse_11;
+    posedge_detector sync_inst_11(
+        .clk(clk_500),
+        .rst(rst),
+        .signal(~lvds_output_11),
+        .detection(synchronized_pulse_11)
+    );
+
+    logic synchronized_pulse_10;
+    posedge_detector sync_inst_10(
+        .clk(clk_500),
+        .rst(rst),
+        .signal(~lvds_output_10),
+        .detection(synchronized_pulse_10)
+    );
+
+    logic synchronized_pulse_9;
+    posedge_detector sync_inst_9(
+        .clk(clk_500),
+        .rst(rst),
+        .signal(~lvds_output_9),
+        .detection(synchronized_pulse_9)
+    );
+
+    logic synchronized_pulse_8;
+    posedge_detector sync_inst_8(
+        .clk(clk_500),
+        .rst(rst),
+        .signal(~lvds_output_8),
+        .detection(synchronized_pulse_8)
+    );
+
+    logic synchronized_pulse_7;
+    posedge_detector sync_inst_7(
+        .clk(clk_500),
+        .rst(rst),
+        .signal(~lvds_output_7),
+        .detection(synchronized_pulse_7)
+    );
+
+    logic synchronized_pulse_6;
+    posedge_detector sync_inst_6(
+        .clk(clk_500),
+        .rst(rst),
+        .signal(~lvds_output_6),
+        .detection(synchronized_pulse_6)
+    );
+
+    logic synchronized_pulse_5;
+    posedge_detector sync_inst_5(
+        .clk(clk_500),
+        .rst(rst),
+        .signal(~lvds_output_5),
+        .detection(synchronized_pulse_5)
+    );
+
+    logic synchronized_pulse_4;
+    posedge_detector sync_inst_4(
+        .clk(clk_500),
+        .rst(rst),
+        .signal(~lvds_output_4),
+        .detection(synchronized_pulse_4)
+    );
+
+    logic synchronized_pulse_3;
+    posedge_detector sync_inst_3(
+        .clk(clk_500),
+        .rst(rst),
+        .signal(~lvds_output_3),
+        .detection(synchronized_pulse_3)
+    );
+
+    logic synchronized_pulse_2;
+    posedge_detector sync_inst_2(
+        .clk(clk_500),
+        .rst(rst),
+        .signal(~lvds_output_2),
+        .detection(synchronized_pulse_2)
+    );
+
+    logic synchronized_pulse_1;
+    posedge_detector sync_inst_1(
+        .clk(clk_500),
+        .rst(rst),
+        .signal(~lvds_output_1),
+        .detection(synchronized_pulse_1)
+    );
+
+    logic synchronized_pulse_0;
+    posedge_detector sync_inst_0(
+        .clk(clk_500),
+        .rst(rst),
+        .signal(~lvds_output_0),
+        .detection(synchronized_pulse_0)
+    );
 
 
     //Shift register 60 bits (deserializer)
-    logic [69:0] shift_reg = 'd0;
-    logic [69:0] shift_reg_next;
+    logic [15:0][63:0] shift_reg = 'd0;
+    logic [15:0][63:0] shift_reg_next;
 
     always_comb begin
-        shift_reg_next = {synchronized_pulse, shift_reg[69:1]};
+        shift_reg_next[15][63:0] = {synchronized_pulse_15, shift_reg[15][63:1]};
+        shift_reg_next[14][63:0] = {synchronized_pulse_14, shift_reg[14][63:1]};
+        shift_reg_next[13][63:0] = {synchronized_pulse_13, shift_reg[13][63:1]};
+        shift_reg_next[12][63:0] = {synchronized_pulse_12, shift_reg[12][63:1]};
+        shift_reg_next[11][63:0] = {synchronized_pulse_11, shift_reg[11][63:1]};
+        shift_reg_next[10][63:0] = {synchronized_pulse_10, shift_reg[10][63:1]};
+        shift_reg_next[9][63:0] = {synchronized_pulse_9, shift_reg[9][63:1]};
+        shift_reg_next[8][63:0] = {synchronized_pulse_8, shift_reg[8][63:1]};
+        shift_reg_next[7][63:0] = {synchronized_pulse_7, shift_reg[7][63:1]};
+        shift_reg_next[6][63:0] = {synchronized_pulse_6, shift_reg[6][63:1]};
+        shift_reg_next[5][63:0] = {synchronized_pulse_5, shift_reg[5][63:1]};
+        shift_reg_next[4][63:0] = {synchronized_pulse_4, shift_reg[4][63:1]};
+        shift_reg_next[3][63:0] = {synchronized_pulse_3, shift_reg[3][63:1]};
+        shift_reg_next[2][63:0] = {synchronized_pulse_2, shift_reg[2][63:1]};
+        shift_reg_next[1][63:0] = {synchronized_pulse_1, shift_reg[1][63:1]};
+        shift_reg_next[0][63:0] = {synchronized_pulse_0, shift_reg[0][63:1]};
     end
 
     always_ff @(posedge clk_500) begin
@@ -112,94 +426,15 @@ module  sampler#(
             shift_reg <= shift_reg_next;
     end
 
-    // logic [4:0] shift_reg_125 = 'd0;
-    // logic [4:0] shift_reg_125_next;
-
-    // //Sync with 100MHz clk
-    // always_comb begin
-    //     shift_reg_125_next = shift_reg;
-    // end
-
-    // always_ff @(posedge clk_125) begin
-    //     if( rst )
-    //         shift_reg_125 <= 'd0;
-    //     else
-    //         shift_reg_125 <= shift_reg_125_next;
-    // end
-
-
-    // ///////// Pulse Buffer /////////////////////////
-    // logic rd_en = 'd0;
-    // logic [4:0] read_pulse;
-    // fifo_generator_0 fifo_ch15 (
-    //     .clk(clk_125),      // input wire clk
-    //     .srst(rst),      // input wire rst
-    //     .din(shift_reg_125),      // input wire [5 : 0] din
-    //     .wr_en('d1),  // input wire wr_en
-    //     .rd_en(rd_en),  // input wire rd_en
-    //     .dout(read_pulse),    // output wire [5 : 0] dout
-    //     .full(B15_IO25),    // output wire full
-    //     .empty(B15_IO0)  // output wire empty
-    // );
-    
-    // c_shift_ram_0 your_instance_name (
-    //     .D(synchronized_pulse),      // input wire [0 : 0] D
-    //     .CLK(clk_500),  // input wire CLK
-    //     .SCLR(rst),  // input wire SCLR
-    //     .Q(Q)      // output wire [0 : 0] Q
-    // );
-
-    // ///////// FSM /////////////////////// Para llenar la FIFO
-    // enum logic {START, READ} state, state_next;
-    
-    // logic [BUFFER_WIDTH-1:0]     hold_state_delay;  //timer para retener la maquina de estados en un estado
-    // logic                       hold_state_reset;  // resetear el timer para retener estado
-    
-    // always_comb begin
-    //     state_next = START;
-    //     rd_en = 'd0;
-    //     hold_state_reset = 1'b1;
-
-    //     case (state)
-    //         START:  begin
-    //                     hold_state_reset = 1'b0;
-    //                     // Verifica si el timer alcanzo el valor predeterminado para este estado
-    //                     if (hold_state_delay >= BUFFER-1) begin
-    //                         state_next = READ;
-    //                         hold_state_reset = 1'b1;
-    //                     end 
-    //                 end
-    //         READ:   begin
-    //                     state_next = READ;
-    //                     rd_en = 'd1;                
-    //                 end
-    //     endcase
-    // end
-
-    // always_ff @(posedge clk_125) begin
-    //     if(rst) 
-    //         state <= START;
-    //     else 
-    //         state <= state_next;
-    // end
-    
-    
-    // always_ff @(posedge clk_125) begin
-    //    if (rst || hold_state_reset) 
-    //        hold_state_delay <= 'd0;
-    //    else
-    //        hold_state_delay <= hold_state_delay + 'd1;       
-    // end
-
     //Evento completo - lectura
     enum logic [1:0] {STAND_BY, READING, WAITING} read_state, read_state_next;
-    logic [79:0] evento_next;
+    logic [15:0][63:0] evento_next;
     // logic [3:0]    sample_n;  //timer para retener la maquina de estados en un estado
     // logic          sample_n_reset;  // resetear el timer para retener estado
 
     always_comb begin
         read_state_next = STAND_BY;
-        event_ready = 0;
+        //event_ready = 0;
         // sample_n_reset = 1;
         evento_next = 'd0;
         case (read_state)
@@ -210,20 +445,19 @@ module  sampler#(
             READING:    begin
                                 evento_next = shift_reg;
                                 read_state_next = WAITING;
-                                event_ready = 'd1;
+                                //event_ready = 'd1;
                                 // sample_n_reset = 'd1;
                         end         
             WAITING:    begin
-                            event_ready = 'd1;
                             if (~event_saved) begin
-                                event_ready = 'd0;
+                                //event_ready = 'd1;
                                 read_state_next = WAITING;
                             end
                         end
         endcase
     end
 
-    always_ff @(posedge clk_125) begin
+    always_ff @(posedge clk_500) begin
         if(rst) begin
             read_state <= STAND_BY;
             evento <= 'd0;
@@ -233,49 +467,5 @@ module  sampler#(
             evento <= evento_next;
         end
     end
-    
-    
-    // always_ff @(posedge clk_500) begin
-    //    if (rst || sample_n_reset) 
-    //        sample_n <= 'd0;
-    //    else
-    //        sample_n <= sample_n + 'd1;       
-    // end
-
-    // //////// Counters
-    // logic [7:0] pulse_counter = 'd0;
-    // logic [7:0] pulse_counter_next = 'd0;
-
-    // //Pulse Counter Logic
-    // always_comb begin
-    //     if (read_pulse)
-    //         pulse_counter_next =  pulse_counter + 'd1;
-    //     else
-    //         pulse_counter_next = pulse_counter;
-    // end
-
-
-    // //FF
-    // always_ff @ (posedge clk_100)
-    //     pulse_counter <= pulse_counter_next;
-
-    // ////////// ILA //////////////////////////////
-    // ila_0 ILA_module (
-    //     .clk(clk), // input wire clk
-
-
-
-    //     .probe0(lvds_output), // input wire [0:0]  probe0  
-    //     .probe1(synchronized_pulse), // input wire [0:0]  probe1 
-    //     .probe2(read_pulse), // input wire [0:0]  probe2 
-    //     .probe3(rd_en), // input wire [0:0]  probe3 
-    //     .probe4(B15_IO25), // input wire [0:0]  probe4 
-    //     .probe5(B15_IO0), // input wire [0:0]  probe5 
-    //     .probe6(hold_state_reset), // input wire [0:0]  probe6 
-    //     .probe7(hold_state_delay), // input wire [5:0]  probe7 
-    //     .probe8(state_next), // input wire [0:0]  probe8 
-    //     .probe9(state), // input wire [0:0]  probe9
-    //     .probe10(pulse_counter)
-    // );
 
 endmodule
