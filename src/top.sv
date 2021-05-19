@@ -24,34 +24,60 @@
 //////////////////////////////////////////////////////////////////////////////
 
 module  top(
-            input   logic   clk_in1,
-            // input   logic   reset,
+            input   logic   clk_500,
+            input   logic   clk_125,
+            input   logic   rst,
             input   logic   trigger,
-            input   logic   event_saved,
-            input   logic   [1:0][15:0][1:0]Ch,
-            output  logic   [31:0] test_salida
+            input   logic   [15:0] Ch_A_P,
+            input   logic   [15:0] Ch_A_N,
+            input   logic   [7:0] cmd,
+            input   logic   [63:0] dout_i,
+            input   logic   empty_i,
+            input   logic   full_i,
+            output  logic   rd_en_o,            
+            output  logic   wr_en_o,
+            output  logic   [63:0] din_o,
+            output  logic   [31:0] event_half_o
+        );
+    // clk_divider clk_divider_inst
+    //     #(
+    //         .O_CLK_FREQ('d125_000_000)
+    //     )(
+    //         .clk_in(clk_500),
+    //         .reset(rst),
+    //         .clk_out(clk_125)
+    //     );
+
+    logic [15:0][63:0] evento;
+    sampler sampler_inst(
+            .clk(clk_500),
+            .rst(rst),
+            .event_saved(event_saved),
+            .Ch_A_P(Ch_A_P[15:0]),
+            .Ch_A_N(Ch_A_N[15:0]),
+            .trig_tresh(trigger),
+            .evento(evento)
         );
 
-    //////////// Main Clock /////////////////////////////////
-    clk_wiz_0 clock_wiz_inst (
-        // Clock out ports
-        .clk_out1(clk_500),    // output clk_out1 500MHz
-        // Status and control signals
-        .reset(rst),          // input reset
-        .locked(locked),        // output locked
-        // Clock in ports
-        .clk_in1(clk_in1))      // input clk_in1
-    ; 
-
-        
-    logic   [15:0][63:0] evento;
-    sampler sampler_1 (
-        .clk_500(clk_500),
-        .event_saved(event_saved),
-        .Ch(Ch),
-        .trig_tresh(trigger),
-        .evento(evento)
+    event_saver event_saver_inst(
+        .clk(clk_125),
+        .rst(rst),
+        .trigger(trigger),     //1 bit
+        .event_i(evento),     //64bits width 15bits depth
+        .full_i(full_i),      //1 bit  
+        .event_saved(event_saved), //1 bit
+        .wr_en_o(wr_en_o),     //1 bit
+        .din_o(din_o[63:0])        //64bits
     );
 
-        assign test_salida[31:0] = evento[15][31:0];
+    event_reader event_reader_inst(
+            .clk(clk_125),
+            .rst(rst),
+            .cmd(cmd[7:0]),
+            .dout_i(dout_i[63:0]),
+            .empty_i(empty_i),
+            .rd_en_o(rd_en_o),
+            .event_half_o(event_half_o[31:0])
+        );
+
 endmodule

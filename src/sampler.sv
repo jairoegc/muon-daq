@@ -25,20 +25,14 @@
 
 
 module  sampler(
-            input   logic   clk_500,
-            // input   logic   reset,
+            input   logic   clk,
+            input   logic   rst,
             input   logic   event_saved,
-            input   logic   [1:0][15:0][1:0]Ch,
+            input   logic   [15:0] Ch_A_P,
+            input   logic   [15:0] Ch_A_N,
             input   logic   trig_tresh,
-            //output  logic   event_ready,
             output  logic   [15:0][63:0] evento
-            //output  logic   B14_L13_P,   //Y18 J2-C23 ?
-            //output  logic   B15_IO25,    //U7 LED 4
-            //output  logic   B15_IO0    //R7 LED 3
         );
-
-    logic rst = 'd0;
-    logic clk_500;
 
     /////////// Input LVDS //////////////////////////////
     logic lvds_output_15;
@@ -51,8 +45,8 @@ module  sampler(
         .IOSTANDARD("LVDS_25") // Specify the input I/O standard
         ) IBUFDS_LVDS_25_15 (
         .O(lvds_output_15), // Buffer output
-        .I(Ch[0][15][1]), // Diff_p buffer input (connect directly to top-level port)
-        .IB(Ch[0][15][0]) // Diff_n buffer input (connect directly to top-level port)
+        .I(Ch_A_P[15]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch_A_N[15]) // Diff_n buffer input (connect directly to top-level port)
     );
     // End of IBUFDS_inst instantiation
 
@@ -66,8 +60,8 @@ module  sampler(
         .IOSTANDARD("LVDS_25") // Specify the input I/O standard
         ) IBUFDS_LVDS_25_14 (
         .O(lvds_output_14), // Buffer output
-        .I(Ch[0][14][1]), // Diff_p buffer input (connect directly to top-level port)
-        .IB(Ch[0][14][0]) // Diff_n buffer input (connect directly to top-level port)
+        .I(Ch_A_P[14]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch_A_N[14]) // Diff_n buffer input (connect directly to top-level port)
     );
 
     logic lvds_output_13;
@@ -80,8 +74,8 @@ module  sampler(
         .IOSTANDARD("LVDS_25") // Specify the input I/O standard
         ) IBUFDS_LVDS_25_13 (
         .O(lvds_output_13), // Buffer output
-        .I(Ch[0][13][1]), // Diff_p buffer input (connect directly to top-level port)
-        .IB(Ch[0][13][0]) // Diff_n buffer input (connect directly to top-level port)
+        .I(Ch_A_P[13]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch_A_N[13]) // Diff_n buffer input (connect directly to top-level port)
     );
 
     logic lvds_output_12;
@@ -94,8 +88,8 @@ module  sampler(
         .IOSTANDARD("LVDS_25") // Specify the input I/O standard
         ) IBUFDS_LVDS_25_12 (
         .O(lvds_output_12), // Buffer output
-        .I(Ch[0][12][1]), // Diff_p buffer input (connect directly to top-level port)
-        .IB(Ch[0][12][0]) // Diff_n buffer input (connect directly to top-level port)
+        .I(Ch_A_P[12]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch_A_N[12]) // Diff_n buffer input (connect directly to top-level port)
     );
 
     logic lvds_output_11;
@@ -108,8 +102,8 @@ module  sampler(
         .IOSTANDARD("LVDS_25") // Specify the input I/O standard
         ) IBUFDS_LVDS_25_11 (
         .O(lvds_output_11), // Buffer output
-        .I(Ch[0][11][1]), // Diff_p buffer input (connect directly to top-level port)
-        .IB(Ch[0][11][0]) // Diff_n buffer input (connect directly to top-level port)
+        .I(Ch_A_P[11]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch_A_N[11]) // Diff_n buffer input (connect directly to top-level port)
     );
 
     logic lvds_output_10;
@@ -122,8 +116,8 @@ module  sampler(
         .IOSTANDARD("LVDS_25") // Specify the input I/O standard
         ) IBUFDS_LVDS_25_10 (
         .O(lvds_output_10), // Buffer output
-        .I(Ch[0][10][1]), // Diff_p buffer input (connect directly to top-level port)
-        .IB(Ch[0][10][0]) // Diff_n buffer input (connect directly to top-level port)
+        .I(Ch_A_P[10]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch_A_N[10]) // Diff_n buffer input (connect directly to top-level port)
     );
 
     logic lvds_output_9;
@@ -136,8 +130,8 @@ module  sampler(
         .IOSTANDARD("LVDS_25") // Specify the input I/O standard
         ) IBUFDS_LVDS_25_9 (
         .O(lvds_output_9), // Buffer output
-        .I(Ch[0][9][1]), // Diff_p buffer input (connect directly to top-level port)
-        .IB(Ch[0][9][0]) // Diff_n buffer input (connect directly to top-level port)
+        .I(Ch_A_P[9]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch_A_N[9]) // Diff_n buffer input (connect directly to top-level port)
     );
 
     logic lvds_output_8;
@@ -150,8 +144,8 @@ module  sampler(
         .IOSTANDARD("LVDS_25") // Specify the input I/O standard
         ) IBUFDS_LVDS_25_8 (
         .O(lvds_output_8), // Buffer output
-        .I(Ch[0][8][1]), // Diff_p buffer input (connect directly to top-level port)
-        .IB(Ch[0][8][0]) // Diff_n buffer input (connect directly to top-level port)
+        .I(Ch_A_P[8]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch_A_N[8]) // Diff_n buffer input (connect directly to top-level port)
     );
 
     logic lvds_output_7;
@@ -164,8 +158,8 @@ module  sampler(
         .IOSTANDARD("LVDS_25") // Specify the input I/O standard
         ) IBUFDS_LVDS_25_7 (
         .O(lvds_output_7), // Buffer output
-        .I(Ch[0][7][1]), // Diff_p buffer input (connect directly to top-level port)
-        .IB(Ch[0][7][0]) // Diff_n buffer input (connect directly to top-level port)
+        .I(Ch_A_P[7]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch_A_N[7]) // Diff_n buffer input (connect directly to top-level port)
     );
 
     logic lvds_output_6;
@@ -178,8 +172,8 @@ module  sampler(
         .IOSTANDARD("LVDS_25") // Specify the input I/O standard
         ) IBUFDS_LVDS_25_6 (
         .O(lvds_output_6), // Buffer output
-        .I(Ch[0][6][1]), // Diff_p buffer input (connect directly to top-level port)
-        .IB(Ch[0][6][0]) // Diff_n buffer input (connect directly to top-level port)
+        .I(Ch_A_P[6]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch_A_N[6]) // Diff_n buffer input (connect directly to top-level port)
     );
 
     logic lvds_output_5;
@@ -192,8 +186,8 @@ module  sampler(
         .IOSTANDARD("LVDS_25") // Specify the input I/O standard
         ) IBUFDS_LVDS_25_5 (
         .O(lvds_output_5), // Buffer output
-        .I(Ch[0][5][1]), // Diff_p buffer input (connect directly to top-level port)
-        .IB(Ch[0][5][0]) // Diff_n buffer input (connect directly to top-level port)
+        .I(Ch_A_P[5]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch_A_N[5]) // Diff_n buffer input (connect directly to top-level port)
     );
 
     logic lvds_output_4;
@@ -206,8 +200,8 @@ module  sampler(
         .IOSTANDARD("LVDS_25") // Specify the input I/O standard
         ) IBUFDS_LVDS_25_4 (
         .O(lvds_output_4), // Buffer output
-        .I(Ch[0][4][1]), // Diff_p buffer input (connect directly to top-level port)
-        .IB(Ch[0][4][0]) // Diff_n buffer input (connect directly to top-level port)
+        .I(Ch_A_P[4]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch_A_N[4]) // Diff_n buffer input (connect directly to top-level port)
     );
 
     logic lvds_output_3;
@@ -220,8 +214,8 @@ module  sampler(
         .IOSTANDARD("LVDS_25") // Specify the input I/O standard
         ) IBUFDS_LVDS_25_3 (
         .O(lvds_output_3), // Buffer output
-        .I(Ch[0][3][1]), // Diff_p buffer input (connect directly to top-level port)
-        .IB(Ch[0][3][0]) // Diff_n buffer input (connect directly to top-level port)
+        .I(Ch_A_P[3]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch_A_N[3]) // Diff_n buffer input (connect directly to top-level port)
     );
 
     logic lvds_output_2;
@@ -234,8 +228,8 @@ module  sampler(
         .IOSTANDARD("LVDS_25") // Specify the input I/O standard
         ) IBUFDS_LVDS_25_2 (
         .O(lvds_output_2), // Buffer output
-        .I(Ch[0][2][1]), // Diff_p buffer input (connect directly to top-level port)
-        .IB(Ch[0][2][0]) // Diff_n buffer input (connect directly to top-level port)
+        .I(Ch_A_P[2]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch_A_N[2]) // Diff_n buffer input (connect directly to top-level port)
     );
 
     logic lvds_output_1;
@@ -248,8 +242,8 @@ module  sampler(
         .IOSTANDARD("LVDS_25") // Specify the input I/O standard
         ) IBUFDS_LVDS_25_1 (
         .O(lvds_output_1), // Buffer output
-        .I(Ch[0][1][1]), // Diff_p buffer input (connect directly to top-level port)
-        .IB(Ch[0][1][0]) // Diff_n buffer input (connect directly to top-level port)
+        .I(Ch_A_P[1]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch_A_N[1]) // Diff_n buffer input (connect directly to top-level port)
     );
 
     logic lvds_output_0;
@@ -262,14 +256,14 @@ module  sampler(
         .IOSTANDARD("LVDS_25") // Specify the input I/O standard
         ) IBUFDS_LVDS_25_0 (
         .O(lvds_output_0), // Buffer output
-        .I(Ch[0][0][1]), // Diff_p buffer input (connect directly to top-level port)
-        .IB(Ch[0][0][0]) // Diff_n buffer input (connect directly to top-level port)
+        .I(Ch_A_P[0]), // Diff_p buffer input (connect directly to top-level port)
+        .IB(Ch_A_N[0]) // Diff_n buffer input (connect directly to top-level port)
     );
 
     ///////// Pulse Sync ////////////////////////////
     logic synchronized_pulse_15;
     posedge_detector sync_inst_15(
-        .clk(clk_500),
+        .clk(clk),
         .rst(rst),
         .signal(~lvds_output_15),
         .detection(synchronized_pulse_15)
@@ -277,7 +271,7 @@ module  sampler(
 
     logic synchronized_pulse_14;
     posedge_detector sync_inst_14(
-        .clk(clk_500),
+        .clk(clk),
         .rst(rst),
         .signal(~lvds_output_14),
         .detection(synchronized_pulse_14)
@@ -285,7 +279,7 @@ module  sampler(
 
     logic synchronized_pulse_13;
     posedge_detector sync_inst_13(
-        .clk(clk_500),
+        .clk(clk),
         .rst(rst),
         .signal(~lvds_output_13),
         .detection(synchronized_pulse_13)
@@ -293,7 +287,7 @@ module  sampler(
 
     logic synchronized_pulse_12;
     posedge_detector sync_inst_12(
-        .clk(clk_500),
+        .clk(clk),
         .rst(rst),
         .signal(~lvds_output_12),
         .detection(synchronized_pulse_12)
@@ -301,7 +295,7 @@ module  sampler(
 
     logic synchronized_pulse_11;
     posedge_detector sync_inst_11(
-        .clk(clk_500),
+        .clk(clk),
         .rst(rst),
         .signal(~lvds_output_11),
         .detection(synchronized_pulse_11)
@@ -309,7 +303,7 @@ module  sampler(
 
     logic synchronized_pulse_10;
     posedge_detector sync_inst_10(
-        .clk(clk_500),
+        .clk(clk),
         .rst(rst),
         .signal(~lvds_output_10),
         .detection(synchronized_pulse_10)
@@ -317,7 +311,7 @@ module  sampler(
 
     logic synchronized_pulse_9;
     posedge_detector sync_inst_9(
-        .clk(clk_500),
+        .clk(clk),
         .rst(rst),
         .signal(~lvds_output_9),
         .detection(synchronized_pulse_9)
@@ -325,7 +319,7 @@ module  sampler(
 
     logic synchronized_pulse_8;
     posedge_detector sync_inst_8(
-        .clk(clk_500),
+        .clk(clk),
         .rst(rst),
         .signal(~lvds_output_8),
         .detection(synchronized_pulse_8)
@@ -333,7 +327,7 @@ module  sampler(
 
     logic synchronized_pulse_7;
     posedge_detector sync_inst_7(
-        .clk(clk_500),
+        .clk(clk),
         .rst(rst),
         .signal(~lvds_output_7),
         .detection(synchronized_pulse_7)
@@ -341,7 +335,7 @@ module  sampler(
 
     logic synchronized_pulse_6;
     posedge_detector sync_inst_6(
-        .clk(clk_500),
+        .clk(clk),
         .rst(rst),
         .signal(~lvds_output_6),
         .detection(synchronized_pulse_6)
@@ -349,7 +343,7 @@ module  sampler(
 
     logic synchronized_pulse_5;
     posedge_detector sync_inst_5(
-        .clk(clk_500),
+        .clk(clk),
         .rst(rst),
         .signal(~lvds_output_5),
         .detection(synchronized_pulse_5)
@@ -357,7 +351,7 @@ module  sampler(
 
     logic synchronized_pulse_4;
     posedge_detector sync_inst_4(
-        .clk(clk_500),
+        .clk(clk),
         .rst(rst),
         .signal(~lvds_output_4),
         .detection(synchronized_pulse_4)
@@ -365,7 +359,7 @@ module  sampler(
 
     logic synchronized_pulse_3;
     posedge_detector sync_inst_3(
-        .clk(clk_500),
+        .clk(clk),
         .rst(rst),
         .signal(~lvds_output_3),
         .detection(synchronized_pulse_3)
@@ -373,7 +367,7 @@ module  sampler(
 
     logic synchronized_pulse_2;
     posedge_detector sync_inst_2(
-        .clk(clk_500),
+        .clk(clk),
         .rst(rst),
         .signal(~lvds_output_2),
         .detection(synchronized_pulse_2)
@@ -381,7 +375,7 @@ module  sampler(
 
     logic synchronized_pulse_1;
     posedge_detector sync_inst_1(
-        .clk(clk_500),
+        .clk(clk),
         .rst(rst),
         .signal(~lvds_output_1),
         .detection(synchronized_pulse_1)
@@ -389,7 +383,7 @@ module  sampler(
 
     logic synchronized_pulse_0;
     posedge_detector sync_inst_0(
-        .clk(clk_500),
+        .clk(clk),
         .rst(rst),
         .signal(~lvds_output_0),
         .detection(synchronized_pulse_0)
@@ -419,7 +413,7 @@ module  sampler(
         shift_reg_next[0][63:0] = {synchronized_pulse_0, shift_reg[0][63:1]};
     end
 
-    always_ff @(posedge clk_500) begin
+    always_ff @(posedge clk) begin
         if( rst )
             shift_reg <= 'd0;
         else
@@ -457,7 +451,7 @@ module  sampler(
         endcase
     end
 
-    always_ff @(posedge clk_500) begin
+    always_ff @(posedge clk) begin
         if(rst) begin
             read_state <= STAND_BY;
             evento <= 'd0;
