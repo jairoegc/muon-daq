@@ -31,7 +31,7 @@ module clk_divider
 	 * Calculamos el valor máximo que nuestro contador debe alcanzar en función
 	 * de O_CLK_FREQ
 	 */
-	localparam COUNTER_MAX = 'd200_000_000/(2 * O_CLK_FREQ) - 1;
+	localparam COUNTER_MAX = 'd400_000_000/(2 * O_CLK_FREQ) - 1;
 	localparam COUNTER_WIDTH = $clog2(COUNTER_MAX);
 
 	reg [COUNTER_WIDTH-1:0] counter = 'd0;

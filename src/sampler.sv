@@ -34,6 +34,16 @@ module  sampler(
             output  logic   [15:0][63:0] evento
         );
 
+
+    ///////// Trigger Synchronization
+    logic trigger_sync;
+    synchronizer trigger_sync_inst(
+        .clk(clk),
+        .aresetn(aresetn),
+        .i_signal(trig_tresh),
+        .o_signal(trigger_sync)
+    );
+
     //Acquisition
     logic [15:0][63:0] shift_reg = 'd0;
     logic [15:0][63:0] shift_reg_next;
@@ -91,7 +101,7 @@ module  sampler(
         evento_next = 'd0;
         case (read_state)
             STAND_BY:   begin
-                            if(trig_tresh)
+                            if(trigger_sync)
                                 read_state_next = READING;                     
                         end 
             READING:    begin

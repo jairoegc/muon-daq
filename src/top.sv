@@ -40,14 +40,6 @@ module  top(
             output  logic   [31:0] event_half_o
         );
 
-    logic synchronized_pulse;
-    synchronizer trigger_sync_inst(
-        .clk(f500_clk),
-        .aresetn(aresetn),
-        .i_signal(trigger),
-        .o_signal(trigger_sync)
-    );
-
     logic [15:0][63:0] evento;
     sampler sampler_inst(
         .clk(f500_clk),
@@ -55,14 +47,14 @@ module  top(
         .event_saved(event_saved),
         .Ch_A_P(Ch_A_P[15:0]),
         //.Ch_A_N(Ch_A_N[15:0]),
-        .trig_tresh(trigger_sync),
+        .trig_tresh(trigger),
         .evento(evento)
     );
 
     event_saver event_saver_inst(
         .clk(f125_clk),
         .aresetn(aresetn),
-        .trigger(trigger_sync),     //1 bit
+        .trigger(trigger),     //1 bit
         .event_i(evento),     //64bits width 15bits depth
         .full_i(full_i),      //1 bit  
         .event_saved(event_saved), //1 bit

@@ -40,6 +40,37 @@ module  event_saver(
             output  logic   [63:0] din_o
         );
 
+    /////////////// Event and Trigger clock synchronization ///////////////////
+    logic [15:0][63:0] event_synchronized_0 = 'd0;
+    logic [15:0][63:0] event_synchronized = 'd0;
+    logic [15:0][63:0] event_synchronized_0_next;
+	logic [15:0][63:0] event_synchronized_next;
+	
+	always_comb begin
+		event_synchronized_0_next = event_i;
+        event_synchronized_next = event_synchronized_0;
+	end
+
+	always_ff@(posedge clk, negedge aresetn)
+	begin
+		if(aresetn == 'b0) begin
+            event_synchronized_0 <= 'd0;
+			event_synchronized <= 'd0;
+        end
+		else begin
+            event_synchronized_0 <= event_synchronized_0_next;
+			event_synchronized <= event_synchronized_next;
+        end
+	end
+    
+    logic trigger_sync;
+    synchronizer trigger_sync_inst(
+        .clk(clk),
+        .aresetn(aresetn),
+        .i_signal(trigger),
+        .o_signal(trigger_sync)
+    );
+
     //////////////////// FSM
     localparam COUNTER_MAX = 'd16;
     localparam COUNTER_WIDTH = $clog2(COUNTER_MAX);
@@ -58,7 +89,7 @@ module  event_saver(
 
         case (state)
             STAND_BY:   begin
-                            if(trigger)
+                            if(trigger_sync)
                                 state_next = WAITING;
                         end
 
@@ -102,19 +133,19 @@ module  event_saver(
 
 
     //////////SAVER
-    logic [15:0][63:0] event_sync;
-    logic [15:0][63:0] event_sync_next;
+    logic [15:0][63:0] event_channel_shift;
+    logic [15:0][63:0] event_channel_shift_next;
 
     always_comb begin : saver
-        event_sync_next = event_i;
+        event_channel_shift_next = event_synchronized;
         wr_en_o = 'd0;
         din_o = 'd0;
         event_saved = 'd0;
         case (state)
             SAVING:     begin
                             wr_en_o = 'd1;
-                            din_o = event_sync[0][63:0];
-                            event_sync_next = {64'd0,event_sync[15:1]};
+                            din_o = event_channel_shift[0][63:0];
+                            event_channel_shift_next = {64'd0,event_channel_shift[15:1]};
                         end
 
             DONE:       begin
@@ -125,10 +156,9 @@ module  event_saver(
 
     always_ff @( posedge clk, negedge aresetn ) begin
         if(aresetn == 'b0) 
-            event_sync <= 'd0;
+            event_channel_shift <= 'd0;
         else 
-            event_sync <= event_sync_next;
-        
+            event_channel_shift <= event_channel_shift_next;
     end
 
 endmodule
