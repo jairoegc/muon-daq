@@ -24,12 +24,12 @@
 //////////////////////////////////////////////////////////////////////////////
 
 module  top(
-            input   logic   clk_500,
-            input   logic   clk_125,
-            input   logic   rst,
+            input   logic   f500_clk,
+            input   logic   f125_clk,
+            input   logic   aresetn,
             input   logic   trigger,
             input   logic   [15:0] Ch_A_P,
-            input   logic   [15:0] Ch_A_N,
+            //input   logic   [15:0] Ch_A_N,
             input   logic   [7:0] cmd,
             input   logic   [63:0] dout_i,
             input   logic   empty_i,
@@ -39,30 +39,30 @@ module  top(
             output  logic   [63:0] din_o,
             output  logic   [31:0] event_half_o
         );
-    // clk_divider clk_divider_inst
-    //     #(
-    //         .O_CLK_FREQ('d125_000_000)
-    //     )(
-    //         .clk_in(clk_500),
-    //         .reset(rst),
-    //         .clk_out(clk_125)
-    //     );
+
+    logic synchronized_pulse;
+    synchronizer trigger_sync_inst(
+        .clk(f500_clk),
+        .aresetn(aresetn),
+        .i_signal(trigger),
+        .o_signal(trigger_sync)
+    );
 
     logic [15:0][63:0] evento;
     sampler sampler_inst(
-            .clk(clk_500),
-            .rst(rst),
-            .event_saved(event_saved),
-            .Ch_A_P(Ch_A_P[15:0]),
-            .Ch_A_N(Ch_A_N[15:0]),
-            .trig_tresh(trigger),
-            .evento(evento)
-        );
+        .clk(f500_clk),
+        .aresetn(aresetn),
+        .event_saved(event_saved),
+        .Ch_A_P(Ch_A_P[15:0]),
+        //.Ch_A_N(Ch_A_N[15:0]),
+        .trig_tresh(trigger_sync),
+        .evento(evento)
+    );
 
     event_saver event_saver_inst(
-        .clk(clk_125),
-        .rst(rst),
-        .trigger(trigger),     //1 bit
+        .clk(f125_clk),
+        .aresetn(aresetn),
+        .trigger(trigger_sync),     //1 bit
         .event_i(evento),     //64bits width 15bits depth
         .full_i(full_i),      //1 bit  
         .event_saved(event_saved), //1 bit
@@ -71,13 +71,13 @@ module  top(
     );
 
     event_reader event_reader_inst(
-            .clk(clk_125),
-            .rst(rst),
-            .cmd(cmd[7:0]),
-            .dout_i(dout_i[63:0]),
-            .empty_i(empty_i),
-            .rd_en_o(rd_en_o),
-            .event_half_o(event_half_o[31:0])
-        );
+        .clk(f125_clk),
+        .aresetn(aresetn),
+        .cmd(cmd[7:0]),
+        .dout_i(dout_i[63:0]),
+        .empty_i(empty_i),
+        .rd_en_o(rd_en_o),
+        .event_half_o(event_half_o[31:0])
+    );
 
 endmodule

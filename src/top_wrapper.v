@@ -24,12 +24,12 @@
 //////////////////////////////////////////////////////////////////////////////
 
 module  top_wrapper(
-            input   clk_500,
-            input   clk_125,
-            input   rst,
+            input   f500_clk,
+            input   f125_clk,
+            input   aresetn,
             input   trigger,
             input   [15:0] Ch_A_P,
-            input   [15:0] Ch_A_N,
+            //input   [15:0] Ch_A_N,
             input   [7:0] cmd,
             input   [63:0] dout_i,
             input   empty_i,
@@ -41,12 +41,12 @@ module  top_wrapper(
         );
 
     top top_inst(
-            .clk_500(clk_500),
-            .clk_125(clk_125),
-            .rst(rst),
+            .f500_clk(f500_clk),
+            .f125_clk(f125_clk),
+            .aresetn(aresetn),
             .trigger(trigger),
             .Ch_A_P(Ch_A_P[15:0]),
-            .Ch_A_N(Ch_A_N[15:0]),
+            //.Ch_A_N(Ch_A_N[15:0]),
             .cmd(cmd[7:0]),
             .dout_i(dout_i[63:0]),
             .empty_i(empty_i),

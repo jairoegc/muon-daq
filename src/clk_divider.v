@@ -1,10 +1,11 @@
+`timescale 1ns / 1ps
 /*
  * clk_divider.v
  * 2017/04/17 - Felipe Veas <felipe.veasv [at] usm.cl>
  * modificado por Jairo Gonzalez 2021
  *
  * Divisor de reloj basado en un contador para una frecuencia de entrada
- * de 500 [MHz]
+ * de 400 [MHz]
  *
  * Recibe como parámetro opcional la frecuencia de salida que debe entregar.
  *
@@ -22,7 +23,7 @@ module clk_divider
 	parameter O_CLK_FREQ = 1
 )(
 	input clk_in,
-	input reset,
+	input aresetn,
 	output reg clk_out
 );
 
@@ -30,7 +31,7 @@ module clk_divider
 	 * Calculamos el valor máximo que nuestro contador debe alcanzar en función
 	 * de O_CLK_FREQ
 	 */
-	localparam COUNTER_MAX = 'd500_000_000/(2 * O_CLK_FREQ) - 1;
+	localparam COUNTER_MAX = 'd200_000_000/(2 * O_CLK_FREQ) - 1;
 	localparam COUNTER_WIDTH = $clog2(COUNTER_MAX);
 
 	reg [COUNTER_WIDTH-1:0] counter = 'd0;
@@ -39,8 +40,8 @@ module clk_divider
 	 * Bloque procedural que resetea el contador e invierte el valor del reloj de salida
 	 * cada vez que el contador llega a su valor máximo.
 	 */
-	always @(posedge clk_in) begin
-		if (reset == 1'b1) begin
+	always @(posedge clk_in, negedge aresetn) begin
+		if (aresetn == 1'b0) begin
 			// Señal reset sincrónico, setea el contador y la salida a un valor conocido
 			counter <= 'd0;
 			clk_out <= 0;

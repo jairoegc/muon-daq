@@ -1,3 +1,4 @@
+`timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////
 // Company: UTFSM
 // Engineer: Jairo González
@@ -15,20 +16,21 @@
 
 /////////////////////////////////////////
 // event_reader event_reader_inst(
-//         .clk(),
-//         .rst(),
-//         //.state_i(),      //2bits
-//         .event_o(),      //64bits width 15bits depth
-//         .empty_i(),      //1 bit
-//         .event_read(),   //1 bit
-//         .rd_en_o(),      //1 bit
-//         .dout_i()        //64bits
+            // .clk(),
+            // .aresetn(),
+            // //.state_i(),
+            // .cmd(),
+            // .dout_i(),
+            // .empty_i(),
+            // //.event_read(),
+            // .rd_en_o(),
+            // .event_half_o()
 //     );
 /////////////////////////////////////////
 
 module  event_reader(
             input   logic   clk,
-            input   logic   rst,
+            input   logic   aresetn,
             //input   state_t [1:0] state_i,
             input   logic   [7:0] cmd,
             input   logic   [63:0] dout_i,
@@ -42,50 +44,62 @@ module  event_reader(
     localparam COUNTER_MAX = 'd16;
     localparam COUNTER_WIDTH = $clog2(COUNTER_MAX);
 
-    enum logic [2:0] {STANDBY, READ, SEND_1, SEND_2, EMPTY}  state, state_next;
+    enum logic [3:0] {STANDBY, SEND_A, HOLD_A, SEND_B, HOLD_B, EMPTY}  state, state_next;
     
     //assign state_o = state;
 
-    logic [COUNTER_WIDTH-1:0]   hold_state_delay;  //timer para retener la maquina de estados en un estado
-    logic                       hold_state_reset;  // resetear el timer para retener estado
+    logic [COUNTER_WIDTH-1:0]   sent_channel_counter;  //Keeps count of channels already sent
+    logic [COUNTER_WIDTH-1:0]   sent_channel_counter_next;
+    logic                       sent_channel_counter_reset;  //reset counter
 
     always_comb begin : FSM
-
         state_next = STANDBY;
-        hold_state_reset = 1'b1;
-
+        sent_channel_counter_reset = 1'b1;
+        rd_en_o = 'd0;
+        sent_channel_counter_next = sent_channel_counter;
         case (state)
             STANDBY:    begin
-                            if(cmd==8'h73)
-                                if (~empty_i)
-                                    state_next = READ;
+                            if(cmd==8'h73) //ASCII s, start
+                                if (~empty_i) begin
+                                    state_next = SEND_A;
+                                    rd_en_o = 'd1;
+                                end
                                 else
                                     state_next = EMPTY;
                         end
 
-            READ:       begin
-                            state_next = SEND_1;
-                            hold_state_reset = 1'b0;
-                            if (hold_state_delay>=COUNTER_MAX-1) begin
+            SEND_A:       begin
+                            state_next = HOLD_A;
+                            sent_channel_counter_reset = 1'b0;
+                        end
+            HOLD_A:     begin
+                            state_next = HOLD_A;
+                            sent_channel_counter_reset = 1'b0;
+                            if (cmd==8'h62) //ASCII b, event part B
+                                state_next = SEND_B;
+                        end
+
+            SEND_B:     begin
+                            state_next = HOLD_B;
+                            sent_channel_counter_reset = 1'b0;
+                            
+                        end
+            HOLD_B:     begin
+                            state_next = HOLD_B;
+                            sent_channel_counter_reset = 1'b0;
+                            if (sent_channel_counter>=COUNTER_MAX-1) begin
                                 state_next = STANDBY;
-                                hold_state_reset = 1'b1;         
+                                sent_channel_counter_reset = 1'b1;
                             end 
-                        end
-
-            SEND_1:     begin
-                            state_next = SEND_1;
-                            if(cmd==8'h6E)
-                                state_next = SEND_2;
-                        end
-
-            SEND_2:     begin
-                            state_next = SEND_2;
-                            if(cmd==8'h6E)
-                                state_next = READ;
+                            else if (cmd==8'h61) begin//ASCII a, event part A                                
+                                sent_channel_counter_next = sent_channel_counter + 1;
+                                rd_en_o = 'd1;
+                                state_next = SEND_A;
+                            end
                         end
             EMPTY:      begin
                             state_next = EMPTY;
-                            if(cmd==8'h6E)
+                            if(cmd==8'h6b) //ASCII k, Acknowledgement
                                 state_next = STANDBY;             
                         end
         endcase
@@ -93,7 +107,7 @@ module  event_reader(
     end
 
     always_ff @(posedge clk) begin
-        if(rst) 
+        if(aresetn == 'b0) 
             state <= STANDBY;
         else 
             state <= state_next;
@@ -101,30 +115,34 @@ module  event_reader(
     
     
     always_ff @(posedge clk) begin
-       if (rst || hold_state_reset) 
-           hold_state_delay <= 'd0;
+       if ((aresetn == 'b0) || sent_channel_counter_reset) 
+           sent_channel_counter <= 'd0;
        else
-           hold_state_delay <= hold_state_delay + 'd1;       
+           sent_channel_counter <= sent_channel_counter_next;       
     end
 
 
     //////////READER
     logic [31:0] event_half = 'd0;
     logic [31:0] event_half_next;
+    logic [31:0] event_half_next_next;
 
     always_comb begin : saver
         event_half_next = 'd0;
-        rd_en_o = 'd0;
+        //event_half_next_next = ;
         case (state)
-            READ:       begin
-                            rd_en_o = 'd1; // Duda, la salida queda fija en la fifo despues de bajar el flag? 
-                        end
-
-            SEND_1:     begin
+            SEND_A:     begin
                             event_half_next[31:0] = dout_i[63:32];
+                            //event_half_next_next[31:0] = dout_i[31:0];
                         end
-            SEND_2:     begin
+            HOLD_A:     begin
+                            event_half_next[31:0] = event_half;
+                        end           
+            SEND_B:     begin
                             event_half_next[31:0] = dout_i[31:0];
+                        end
+            HOLD_B:     begin
+                            event_half_next[31:0] = event_half;
                         end
             EMPTY:      begin
                             event_half_next[31:0] = 'h65; //ASCII e, empty
@@ -133,7 +151,7 @@ module  event_reader(
     end
 
     always_ff @( posedge clk ) begin
-        if(rst) 
+        if(aresetn == 'b0) 
             event_half <= 'd0;
         else 
             event_half <= event_half_next;

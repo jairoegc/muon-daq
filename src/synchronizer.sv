@@ -6,30 +6,35 @@
 // Create Date: 24.09.2020 18:39
 // Design Name: synchronizer
 // Module Name: synchronizer
-// Project Name: sapler
-// Target Devices: Trenz FPGA TE0712
-// Description: emits 1 clock cycle signal when rising edge detected 
+// Project Name: sampler
+// Target Devices: Trenz FPGA TE0720
+// Description: Sync input signal with clk
 // 
 //                  
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module synchronizer(clk,rst,i_signal,o_signal);
+module synchronizer(clk,aresetn,i_signal,o_signal);
 
-	input logic clk, rst, i_signal;
+	input logic clk, aresetn, i_signal;
 	output logic o_signal;
 	
 	logic [1:0] flip_flops = 2'd0;
+	logic [1:0] flip_flops_next;
 	
-	always_ff@(posedge clk)
+	always_comb begin
+		flip_flops_next = {flip_flops[0],i_signal};
+	end
+
+	always_ff@(posedge clk, negedge aresetn)
 	begin
-		if(rst)
+		if(aresetn == 'b0)
 			flip_flops <= 2'd0;
 		else 	
-			flip_flops <= {flip_flops[0],i_signal};
+			flip_flops <= flip_flops_next;
 	end
 	
-	assign o_signal = flip_flops[0];
+	assign o_signal = flip_flops[1];
 
 
 endmodule

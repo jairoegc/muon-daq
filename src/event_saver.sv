@@ -1,3 +1,4 @@
+`timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////
 // Company: UTFSM
 // Engineer: Jairo González
@@ -16,7 +17,7 @@
 /////////////////////////////////////////
 // event_saver event_saver_inst(
 //         .clk(),
-//         .rst(),
+//         .aresetn(),
 //         .trigger(),     //1 bit 
 //         //.state_i(),     //2bits
 //         .event_i(),     //64bits width 15bits depth
@@ -29,7 +30,7 @@
 
 module  event_saver(
             input   logic   clk,
-            input   logic   rst,
+            input   logic   aresetn,
             input   logic   trigger,
             //input   state_t [1:0] state_i,
             input   logic   [15:0][63:0] event_i,
@@ -84,16 +85,16 @@ module  event_saver(
         
     end
 
-    always_ff @(posedge clk) begin
-        if(rst) 
+    always_ff @(posedge clk, negedge aresetn) begin
+        if(aresetn == 'b0) 
             state <= STAND_BY;
         else 
             state <= state_next;
     end
     
     
-    always_ff @(posedge clk) begin
-       if (rst || hold_state_reset) 
+    always_ff @(posedge clk, negedge aresetn) begin
+       if ((aresetn == 'b0) || hold_state_reset) 
            hold_state_delay <= 'd0;
        else
            hold_state_delay <= hold_state_delay + 'd1;       
@@ -122,8 +123,8 @@ module  event_saver(
         endcase
     end
 
-    always_ff @( posedge clk ) begin
-        if(rst) 
+    always_ff @( posedge clk, negedge aresetn ) begin
+        if(aresetn == 'b0) 
             event_sync <= 'd0;
         else 
             event_sync <= event_sync_next;
