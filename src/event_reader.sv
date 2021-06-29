@@ -41,22 +41,11 @@ module  event_reader(
         );
     
     //////////////////// FSM
-    localparam COUNTER_MAX = 'd16;
-    localparam COUNTER_WIDTH = $clog2(COUNTER_MAX);
-
     enum logic [3:0] {STANDBY, SEND_A, HOLD_A, SEND_B, HOLD_B, EMPTY}  state, state_next;
     
-    //assign state_o = state;
-
-    logic [COUNTER_WIDTH-1:0]   sent_channel_counter;  //Keeps count of channels already sent
-    logic [COUNTER_WIDTH-1:0]   sent_channel_counter_next;
-    logic                       sent_channel_counter_reset;  //reset counter
-
     always_comb begin : FSM
         state_next = STANDBY;
-        sent_channel_counter_reset = 1'b1;
         rd_en_o = 'd0;
-        sent_channel_counter_next = sent_channel_counter;
         case (state)
             STANDBY:    begin
                             if(cmd==8'h73) //ASCII s, start
@@ -70,29 +59,22 @@ module  event_reader(
 
             SEND_A:       begin
                             state_next = HOLD_A;
-                            sent_channel_counter_reset = 1'b0;
                         end
             HOLD_A:     begin
                             state_next = HOLD_A;
-                            sent_channel_counter_reset = 1'b0;
                             if (cmd==8'h62) //ASCII b, event part B
                                 state_next = SEND_B;
                         end
 
             SEND_B:     begin
-                            state_next = HOLD_B;
-                            sent_channel_counter_reset = 1'b0;
-                            
+                            state_next = HOLD_B;                            
                         end
             HOLD_B:     begin
                             state_next = HOLD_B;
-                            sent_channel_counter_reset = 1'b0;
-                            if (sent_channel_counter>=COUNTER_MAX-1) begin
+                            if (cmd==8'h64) begin//ASCII d, Done.
                                 state_next = STANDBY;
-                                sent_channel_counter_reset = 1'b1;
                             end 
-                            else if (cmd==8'h61) begin//ASCII a, event part A                                
-                                sent_channel_counter_next = sent_channel_counter + 1;
+                            else if (cmd==8'h61) begin//ASCII a, event part A        
                                 rd_en_o = 'd1;
                                 state_next = SEND_A;
                             end
@@ -103,32 +85,22 @@ module  event_reader(
                                 state_next = STANDBY;             
                         end
         endcase
-        
     end
 
-    always_ff @(posedge clk) begin
+    always_ff @(posedge clk, negedge aresetn) begin
         if(aresetn == 'b0) 
             state <= STANDBY;
         else 
             state <= state_next;
     end
     
-    
-    always_ff @(posedge clk) begin
-       if ((aresetn == 'b0) || sent_channel_counter_reset) 
-           sent_channel_counter <= 'd0;
-       else
-           sent_channel_counter <= sent_channel_counter_next;       
-    end
-
-
     //////////READER
     logic [31:0] event_half = 'd0;
     logic [31:0] event_half_next;
     logic [31:0] event_half_next_next;
 
     always_comb begin : saver
-        event_half_next = 'd0;
+        event_half_next = 'hAAAAAAAAAAAAAAAA;
         //event_half_next_next = ;
         case (state)
             SEND_A:     begin
@@ -150,12 +122,11 @@ module  event_reader(
         endcase
     end
 
-    always_ff @( posedge clk ) begin
+    always_ff @( posedge clk, negedge aresetn ) begin
         if(aresetn == 'b0) 
             event_half <= 'd0;
         else 
             event_half <= event_half_next;
-        
     end
 
     assign event_half_o = event_half;
