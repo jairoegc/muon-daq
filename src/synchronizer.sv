@@ -23,7 +23,7 @@ module synchronizer(clk,aresetn,i_signal,o_signal);
 	logic [1:0] flip_flops_next;
 	
 	always_comb begin
-		flip_flops_next = {flip_flops[0],i_signal};
+		flip_flops_next[1:0] = {flip_flops[0],i_signal};
 	end
 
 	always_ff@(posedge clk, negedge aresetn)

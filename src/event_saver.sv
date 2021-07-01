@@ -21,7 +21,8 @@
 //         .trigger(),     //1 bit 
 //         //.state_i(),     //2bits
 //         .event_i(),     //64bits width 15bits depth
-//         .full_i(),      //1 bit  
+//         .full_i(),      //1 bit
+//         .event_ready_i()  //1 bit
 //         .event_saved(), //1 bit
 //         .wr_en_o(),     //1 bit
 //         .din_o()        //64bits
@@ -35,6 +36,7 @@ module  event_saver(
             //input   state_t [1:0] state_i,
             input   logic   [15:0][63:0] event_i,
             input   logic   full_i,
+            input   logic   event_ready_i,
             output  logic   event_saved,
             output  logic   wr_en_o,
             output  logic   [63:0] din_o
@@ -63,13 +65,22 @@ module  event_saver(
         end
 	end
     
-    logic trigger_sync;
-    synchronizer trigger_sync_inst(
+    logic event_ready_sync;
+    synchronizer event_ready_sync_inst(
         .clk(clk),
         .aresetn(aresetn),
-        .i_signal(trigger),
-        .o_signal(trigger_sync)
+        .i_signal(event_ready_i),
+        .o_signal(event_ready_sync)
     );
+
+    posedge_detector posedge_detector_inst(
+        .clk(clk), 
+        .aresetn(aresetn),
+        .signal(event_ready_sync),
+        .detection(event_ready_sync_posedge)
+    );
+
+
 
     //////////////////// FSM
     localparam COUNTER_MAX = 'd16;
@@ -89,7 +100,7 @@ module  event_saver(
 
         case (state)
             STAND_BY:   begin
-                            if(trigger_sync)
+                            if(event_ready_sync_posedge)
                                 state_next = WAITING;
                         end
 
@@ -133,18 +144,18 @@ module  event_saver(
 
 
     //////////SAVER
-    logic [15:0][63:0] event_channel_shift;
-    logic [15:0][63:0] event_channel_shift_next;
-
+    logic [15:0][63:0] event_channel_shift, event_channel_shift_next;
+    logic [63:0] din, din_next;
+    logic wr_en, wr_en_next;
     always_comb begin : saver
         event_channel_shift_next = event_synchronized;
-        wr_en_o = 'd0;
-        din_o = 'd0;
+        wr_en_next = 'd0;
+        din_next = 'd0;
         event_saved = 'd0;
         case (state)
             SAVING:     begin
-                            wr_en_o = 'd1;
-                            din_o = event_channel_shift[0][63:0];
+                            wr_en_next = 'd1;
+                            din_next = event_channel_shift[0][63:0];
                             event_channel_shift_next = {64'd0,event_channel_shift[15:1]};
                         end
 
@@ -155,10 +166,18 @@ module  event_saver(
     end
 
     always_ff @( posedge clk, negedge aresetn ) begin
-        if(aresetn == 'b0) 
+        if(aresetn == 'b0) begin
             event_channel_shift <= 'd0;
-        else 
+            din <= 'd0;
+            wr_en <= 'd0;
+        end
+        else begin
             event_channel_shift <= event_channel_shift_next;
+            din <= din_next;
+            wr_en <= wr_en_next;
+        end
     end
 
+    assign din_o = din;
+    assign wr_en_o = wr_en;
 endmodule

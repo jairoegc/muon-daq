@@ -48,6 +48,7 @@ module  top(
         .Ch_A_P(Ch_A_P[15:0]),
         //.Ch_A_N(Ch_A_N[15:0]),
         .trig_tresh(trigger),
+        .event_ready(event_ready),
         .evento(evento)
     );
 
@@ -56,7 +57,8 @@ module  top(
         .aresetn(aresetn),
         .trigger(trigger),     //1 bit
         .event_i(evento),     //64bits width 15bits depth
-        .full_i(full_i),      //1 bit  
+        .full_i(full_i),      //1 bit
+        .event_ready_i(event_ready),  //1 bit
         .event_saved(event_saved), //1 bit
         .wr_en_o(wr_en_o),     //1 bit
         .din_o(din_o[63:0])        //64bits
