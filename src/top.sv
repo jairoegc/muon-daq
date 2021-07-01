@@ -29,7 +29,7 @@ module  top(
             input   logic   aresetn,
             input   logic   trigger,
             input   logic   [15:0] Ch_A_P,
-            //input   logic   [15:0] Ch_A_N,
+            input   logic   [15:0] Ch_A_N,
             input   logic   [7:0] cmd,
             input   logic   [63:0] dout_i,
             input   logic   empty_i,
@@ -46,7 +46,7 @@ module  top(
         .aresetn(aresetn),
         .event_saved(event_saved),
         .Ch_A_P(Ch_A_P[15:0]),
-        //.Ch_A_N(Ch_A_N[15:0]),
+        .Ch_A_N(Ch_A_N[15:0]),
         .trig_tresh(trigger),
         .event_ready(event_ready),
         .evento(evento)

@@ -29,7 +29,7 @@ module  sampler(
             input   logic   aresetn,
             input   logic   event_saved,
             input   logic   [15:0] Ch_A_P,
-            //input   logic   [15:0] Ch_A_N,
+            input   logic   [15:0] Ch_A_N,
             input   logic   trig_tresh,
             output  logic   event_ready,
             output  logic   [15:0][63:0] evento
@@ -43,6 +43,14 @@ module  sampler(
         .aresetn(aresetn),
         .i_signal(trig_tresh),
         .o_signal(trigger_sync)
+    );
+
+    logic event_saved_sync;
+    synchronizer event_saved_inst(
+        .clk(clk),
+        .aresetn(aresetn),
+        .i_signal(event_saved),
+        .o_signal(event_saved_sync)
     );
 
     posedge_detector posedge_detector_inst(
@@ -59,20 +67,20 @@ module  sampler(
     generate
         for (i=0; i<16; i++) begin
             // /////////// Input LVDS //////////////////////////////
-            // logic IBUF_output;
-            // // IBUFDS: Differential Input Buffer
-            // // 7 Series
-            // // Xilinx HDL Libraries Guide, version 13.4
-            // IBUFDS #(
-            //     .DIFF_TERM("TRUE"), // Differential Termination
-            //     .IBUF_LOW_PWR("TRUE"), // Low power="TRUE", Highest performance="FALSE"
-            //     .IOSTANDARD("LVDS_25") // Specify the input I/O standard
-            //     ) IBUFDS_LVDS_25 (
-            //     .O(IBUF_output), // Buffer output
-            //     .I(Ch_A_P[i]), // Diff_p buffer input (connect directly to top-level port)
-            //     .IB(Ch_A_N[i]) // Diff_n buffer input (connect directly to top-level port)
-            // );  
-            // // End of IBUFDS_inst instantiation
+            logic IBUF_output;
+            // IBUFDS: Differential Input Buffer
+            // 7 Series
+            // Xilinx HDL Libraries Guide, version 13.4
+            IBUFDS #(
+                .DIFF_TERM("TRUE"), // Differential Termination
+                .IBUF_LOW_PWR("TRUE"), // Low power="TRUE", Highest performance="FALSE"
+                .IOSTANDARD("LVDS_25") // Specify the input I/O standard
+                ) IBUFDS_LVDS_25 (
+                .O(IBUF_output), // Buffer output
+                .I(Ch_A_P[i]), // Diff_p buffer input (connect directly to top-level port)
+                .IB(Ch_A_N[i]) // Diff_n buffer input (connect directly to top-level port)
+            );  
+            // End of IBUFDS_inst instantiation
 
             ///////// Pulse Sync ////////////////////////////
             
@@ -80,7 +88,7 @@ module  sampler(
             synchronizer sync_inst1(
                 .clk(clk),
                 .aresetn(aresetn),
-                .i_signal(Ch_A_P[i]),
+                .i_signal(IBUF_output),
                 .o_signal(synchronized_pulse1)
             );
 
@@ -113,10 +121,10 @@ module  sampler(
 
     //Discrimination FSM
     enum logic [1:0] {STAND_BY, READING, WAITING} read_state, read_state_next;
-    
+    logic event_ready_o, event_ready_next;
     always_comb begin
         read_state_next = STAND_BY;
-        event_ready = 0;
+        event_ready_next = 0;
         case (read_state)
             STAND_BY:   begin
                             if(trigger_sync_posedge)
@@ -124,11 +132,11 @@ module  sampler(
                         end 
             READING:    begin
                             read_state_next = WAITING;
-                            event_ready = 1;
+                            event_ready_next = 1;
                         end         
             WAITING:    begin
-                            if (~event_saved) begin
-                                event_ready = 1;
+                            if (~event_saved_sync) begin
+                                event_ready_next = 1;
                                 read_state_next = WAITING;
                             end
                         end
@@ -138,9 +146,11 @@ module  sampler(
     always_ff @(posedge clk, negedge aresetn) begin
         if(aresetn == 'b0) begin
             read_state <= STAND_BY;
+            event_ready_o <= 'b0;
         end
         else begin
             read_state <= read_state_next;
+             event_ready_o <=  event_ready_next;
         end
     end
 

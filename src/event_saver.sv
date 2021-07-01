@@ -146,12 +146,12 @@ module  event_saver(
     //////////SAVER
     logic [15:0][63:0] event_channel_shift, event_channel_shift_next;
     logic [63:0] din, din_next;
-    logic wr_en, wr_en_next;
+    logic wr_en, wr_en_next, event_saved_o, event_saved_next;
     always_comb begin : saver
         event_channel_shift_next = event_synchronized;
         wr_en_next = 'd0;
         din_next = 'd0;
-        event_saved = 'd0;
+        event_saved_next = 'd0;
         case (state)
             SAVING:     begin
                             wr_en_next = 'd1;
@@ -160,7 +160,7 @@ module  event_saver(
                         end
 
             DONE:       begin
-                            event_saved = 'd1;
+                            event_saved_next = 'd1;
                         end
         endcase
     end
@@ -170,14 +170,17 @@ module  event_saver(
             event_channel_shift <= 'd0;
             din <= 'd0;
             wr_en <= 'd0;
+            event_saved_o <= 'd0;
         end
         else begin
             event_channel_shift <= event_channel_shift_next;
             din <= din_next;
             wr_en <= wr_en_next;
+            event_saved_o <= event_saved_next;
         end
     end
 
     assign din_o = din;
     assign wr_en_o = wr_en;
+    assign event_saved = event_saved_o;
 endmodule
