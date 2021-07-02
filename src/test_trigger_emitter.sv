@@ -31,7 +31,7 @@ module  test_trigger_emitter(
         );
 
     // Trigger counter parameters and variables
-    localparam TRIGGER_COUNTER_MAX = 'd47;
+    localparam TRIGGER_COUNTER_MAX = 'd48;
     localparam TRIGGER_COUNTER_WIDTH = $clog2(TRIGGER_COUNTER_MAX);
 
     logic [TRIGGER_COUNTER_WIDTH-1:0] trigger_counter;

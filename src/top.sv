@@ -40,7 +40,19 @@ module  top(
             output  logic   [31:0] event_half_o
         );
 
-    logic [15:0][63:0] evento;
+    // // // FFs stage for reset signal, just for better timing performance
+    // logic [15:0] ff_aresetn, ff_aresetn_next;
+    // always_comb begin
+    //     ff_aresetn_next = {aresetn,ff_aresetn[15:1]};
+    // end
+
+    // always_ff@(posedge f500_clk) begin
+    //     ff_aresetn <= ff_aresetn_next;
+    // end
+
+
+    //// Modules instantation
+    logic [63:0] evento[15:0];
     sampler sampler_inst(
         .clk(f500_clk),
         .aresetn(aresetn),
@@ -49,14 +61,13 @@ module  top(
         .Ch_A_N(Ch_A_N[15:0]),
         .trig_tresh(trigger),
         .event_ready(event_ready),
-        .evento(evento)
+        .evento(evento) // Unpacked array of 15 64bits packed vectors
     );
 
     event_saver event_saver_inst(
         .clk(f125_clk),
         .aresetn(aresetn),
-        .trigger(trigger),     //1 bit
-        .event_i(evento),     //64bits width 15bits depth
+        .event_i(evento),     // Unpacked array of 15 64bits packed vectors
         .full_i(full_i),      //1 bit
         .event_ready_i(event_ready),  //1 bit
         .event_saved(event_saved), //1 bit

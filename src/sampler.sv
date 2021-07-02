@@ -32,7 +32,7 @@ module  sampler(
             input   logic   [15:0] Ch_A_N,
             input   logic   trig_tresh,
             output  logic   event_ready,
-            output  logic   [15:0][63:0] evento
+            output  logic   [63:0] evento[15:0]
         );
 
 
@@ -61,8 +61,8 @@ module  sampler(
     );
 
     //Acquisition
-    logic [15:0][63:0] shift_reg = 'd0;
-    logic [15:0][63:0] shift_reg_next;
+    logic [63:0] shift_reg[15:0] = '{default:0};
+    logic [63:0] shift_reg_next[15:0];
     genvar i;
     generate
         for (i=0; i<16; i++) begin
@@ -108,7 +108,7 @@ module  sampler(
             
             //Shift register 64 bits (deserializer)
             always_comb begin
-                shift_reg_next[i][63:0] = {synchronized_pulse, shift_reg[i][63:1]};
+                shift_reg_next[i] = {synchronized_pulse, shift_reg[i][63:1]};
             end
             always_ff @(posedge clk, negedge aresetn) begin
                 if( aresetn == 'b0)
@@ -118,6 +118,24 @@ module  sampler(
             end
         end
     endgenerate
+
+    // Test Trigger setup
+    // logic start_posedge;
+    // posedge_detector posedge_detector_inst(
+    //     .clk(clk), 
+    //     .aresetn(aresetn),
+    //     .signal(shift_reg[15][63]),
+    //     .detection(start_posedge)
+    // );
+
+    // logic trigger_sync_posedge;
+    // test_trigger_emitter test_trigger_emitter_inst(
+    //     .clk(clk), //1 bit
+    //     .aresetn(aresetn), //1 bit
+    //     .start_i(start_posedge), //1 bit
+    //     .trigger_o(trigger_sync_posedge) //1 bit
+    // );
+
 
     //Discrimination FSM
     enum logic [1:0] {STAND_BY, READING, WAITING} read_state, read_state_next;
@@ -150,15 +168,41 @@ module  sampler(
         end
         else begin
             read_state <= read_state_next;
-             event_ready_o <=  event_ready_next;
+            event_ready_o <=  event_ready_next;
         end
     end
 
+    // Extra fliflops, for better timing performance
+    logic [1:0] read_state2 [1:0];
+    logic [1:0] read_state2_next [1:0];
+    logic event_ready_o2[1:0];
+    logic event_ready_o2_next[1:0];
+
+    always_comb begin : blockName
+        read_state2_next[0] = read_state2[1];
+        read_state2_next[1] = read_state;
+        event_ready_o2_next[0] = event_ready_o2[1];
+        event_ready_o2_next[1] = event_ready_o;
+    end
+
+    always_ff @(posedge clk, negedge aresetn) begin
+        if(aresetn == 'b0) begin
+            read_state2 <= '{default:STAND_BY};
+            event_ready_o2 <= '{default:0};
+        end
+        else begin
+            read_state2 <= read_state2_next;
+            event_ready_o2 <=  event_ready_o2_next;
+        end
+    end
+
+    assign event_ready = event_ready_o2[0];
+
     //Event value
-    logic [15:0][63:0] evento_next;
+    logic [63:0] evento_next[15:0];
     always_comb begin
-        evento_next = 'd0;
-        case (read_state)
+        evento_next = '{default:0};
+        case (read_state2[0])
             READING:    begin
                             evento_next = shift_reg;
                         end         
@@ -170,7 +214,7 @@ module  sampler(
 
     always_ff @(posedge clk, negedge aresetn) begin
         if(aresetn == 'b0) begin
-            evento <= 'd0;
+            evento <= '{default:0};
         end
         else begin
             evento <= evento_next;

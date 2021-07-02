@@ -17,8 +17,7 @@
 /////////////////////////////////////////
 // event_saver event_saver_inst(
 //         .clk(),
-//         .aresetn(),
-//         .trigger(),     //1 bit 
+//         .aresetn(), 
 //         //.state_i(),     //2bits
 //         .event_i(),     //64bits width 15bits depth
 //         .full_i(),      //1 bit
@@ -32,9 +31,8 @@
 module  event_saver(
             input   logic   clk,
             input   logic   aresetn,
-            input   logic   trigger,
             //input   state_t [1:0] state_i,
-            input   logic   [15:0][63:0] event_i,
+            input   logic   [63:0] event_i[15:0],
             input   logic   full_i,
             input   logic   event_ready_i,
             output  logic   event_saved,
@@ -43,10 +41,10 @@ module  event_saver(
         );
 
     /////////////// Event and Trigger clock synchronization ///////////////////
-    logic [15:0][63:0] event_synchronized_0 = 'd0;
-    logic [15:0][63:0] event_synchronized = 'd0;
-    logic [15:0][63:0] event_synchronized_0_next;
-	logic [15:0][63:0] event_synchronized_next;
+    logic [63:0] event_synchronized_0[15:0] = '{default:0};
+    logic [63:0] event_synchronized[15:0]  = '{default:0};
+    logic [63:0] event_synchronized_0_next[15:0] ;
+	logic [63:0] event_synchronized_next[15:0] ;
 	
 	always_comb begin
 		event_synchronized_0_next = event_i;
@@ -56,8 +54,8 @@ module  event_saver(
 	always_ff@(posedge clk, negedge aresetn)
 	begin
 		if(aresetn == 'b0) begin
-            event_synchronized_0 <= 'd0;
-			event_synchronized <= 'd0;
+            event_synchronized_0 <= '{default:0};
+			event_synchronized <= '{default:0};
         end
 		else begin
             event_synchronized_0 <= event_synchronized_0_next;
@@ -144,7 +142,7 @@ module  event_saver(
 
 
     //////////SAVER
-    logic [15:0][63:0] event_channel_shift, event_channel_shift_next;
+    logic [63:0] event_channel_shift[15:0], event_channel_shift_next[15:0];
     logic [63:0] din, din_next;
     logic wr_en, wr_en_next, event_saved_o, event_saved_next;
     always_comb begin : saver
@@ -155,7 +153,7 @@ module  event_saver(
         case (state)
             SAVING:     begin
                             wr_en_next = 'd1;
-                            din_next = event_channel_shift[0][63:0];
+                            din_next = event_channel_shift[0];
                             event_channel_shift_next = {64'd0,event_channel_shift[15:1]};
                         end
 
@@ -167,7 +165,7 @@ module  event_saver(
 
     always_ff @( posedge clk, negedge aresetn ) begin
         if(aresetn == 'b0) begin
-            event_channel_shift <= 'd0;
+            event_channel_shift <= '{default:0};
             din <= 'd0;
             wr_en <= 'd0;
             event_saved_o <= 'd0;
@@ -180,7 +178,26 @@ module  event_saver(
         end
     end
 
+    //Extra FFs, for better timing  performance
+    logic event_saved_o1[1:0];
+    logic event_saved_o1_next[1:0];
+    always_comb begin
+        event_saved_o1_next[0] = event_saved_o1[1];
+        event_saved_o1_next[1] = event_saved_o;
+    end
+
+    always_ff @( posedge clk, negedge aresetn ) begin
+        if(aresetn == 'b0) begin
+            event_saved_o1 <= '{default:0};
+        end
+        else begin
+            event_saved_o1 <= event_saved_o1_next;
+        end
+    end
+
+    
+
     assign din_o = din;
     assign wr_en_o = wr_en;
-    assign event_saved = event_saved_o;
+    assign event_saved = event_saved_o1[0];
 endmodule
