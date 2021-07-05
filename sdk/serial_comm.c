@@ -65,6 +65,111 @@ int main()
 	XGpio_SetDataDirection(&input,1,0xFFFFFFFF);
 	XGpio_SetDataDirection(&output,1,0x00);
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//	u32 comando,dato_A, dato_B;
+//	unsigned long long big_dato_A, big_dato_B;
+//	int i,j;
+//	while(1){
+//		comando = getchar();
+//
+//		if (comando == 's'){
+//			XGpio_DiscreteWrite(&output,1,comando);
+//			dato_A = XGpio_DiscreteRead(&input,1);
+//			if (dato_A == 'e'){
+//				XGpio_DiscreteWrite(&output,1,'k');
+//				dato_A = 0;
+//			}
+//			else{
+//				printf("ev|ch,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15\n");
+//				printf("1,");
+//				big_dato_A = dato_A;
+//				XGpio_DiscreteWrite(&output,1,'b');
+//				dato_B = XGpio_DiscreteRead(&input,1);
+//				big_dato_B = dato_B;
+//				printf("%llu,",(big_dato_A<<32)|big_dato_B);
+//				dato_A = 0;
+//				dato_B = 0;
+//				big_dato_A = 0;
+//				big_dato_B = 0;
+//
+//				for (i = 1; i <15; i++){
+//					XGpio_DiscreteWrite(&output,1,'a');
+//					dato_A = XGpio_DiscreteRead(&input,1);
+//					big_dato_A = dato_A;
+//					XGpio_DiscreteWrite(&output,1,'b');
+//					dato_B = XGpio_DiscreteRead(&input,1);
+//					big_dato_B = dato_B;
+//					printf("%llu,",(big_dato_A<<32)|big_dato_B);
+//					dato_A = 0;
+//					dato_B = 0;
+//					big_dato_A = 0;
+//					big_dato_B = 0;
+//
+//				}
+//				XGpio_DiscreteWrite(&output,1,'a');
+//				dato_A = XGpio_DiscreteRead(&input,1);
+//				big_dato_A = dato_A;
+//				XGpio_DiscreteWrite(&output,1,'b');
+//				dato_B = XGpio_DiscreteRead(&input,1);
+//				big_dato_B = dato_B;
+//				printf("%llu\n",(big_dato_A<<32)|big_dato_B);
+//				dato_A = 0;
+//				dato_B = 0;
+//				big_dato_A = 0;
+//				big_dato_B = 0;
+//				XGpio_DiscreteWrite(&output,1,'d');
+//
+//				for (j = 2; j < 37; j++){
+//					printf("%d,",j);
+//					XGpio_DiscreteWrite(&output,1,'s');
+//					dato_A = XGpio_DiscreteRead(&input,1);
+//					big_dato_A = dato_A;
+//					XGpio_DiscreteWrite(&output,1,'b');
+//					dato_B = XGpio_DiscreteRead(&input,1);
+//					big_dato_B = dato_B;
+//					printf("%llu,",(big_dato_A<<32)|big_dato_B);
+//					dato_A = 0;
+//					dato_B = 0;
+//					big_dato_A = 0;
+//					big_dato_B = 0;
+//
+//					for (i = 1; i <15; i++){
+//						XGpio_DiscreteWrite(&output,1,'a');
+//						dato_A = XGpio_DiscreteRead(&input,1);
+//						big_dato_A = dato_A;
+//						XGpio_DiscreteWrite(&output,1,'b');
+//						dato_B = XGpio_DiscreteRead(&input,1);
+//						big_dato_B = dato_B;
+//						printf("%llu,",(big_dato_A<<32)|big_dato_B);
+//						dato_A = 0;
+//						dato_B = 0;
+//						big_dato_A = 0;
+//						big_dato_B = 0;
+//
+//					}
+//					XGpio_DiscreteWrite(&output,1,'a');
+//					dato_A = XGpio_DiscreteRead(&input,1);
+//					big_dato_A = dato_A;
+//					XGpio_DiscreteWrite(&output,1,'b');
+//					dato_B = XGpio_DiscreteRead(&input,1);
+//					big_dato_B = dato_B;
+//					printf("%llu\n",(big_dato_A<<32)|big_dato_B);
+//					dato_A = 0;
+//					dato_B = 0;
+//					big_dato_A = 0;
+//					big_dato_B = 0;
+//					XGpio_DiscreteWrite(&output,1,'d');
+//				}
+//			}
+//		}
+//	}
+//
+//
+//
+//
+//
+
+
+
 
 	u32 comando, dato_A, dato_B;
 	int i;
@@ -95,7 +200,7 @@ int main()
 		}
 	}
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //		u32 comando, dato;
 //
